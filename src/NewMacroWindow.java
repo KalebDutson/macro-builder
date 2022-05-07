@@ -13,33 +13,31 @@ public class NewMacroWindow {
         Dimension screenSize = toolkit.getScreenSize();
 
         JFrame f = new JFrame();
-
-//        Container container = new Container();
-//        GroupLayout layout = new GroupLayout(container);
+        JPanel pane = new JPanel(new GridBagLayout());
 
         JButton b1 = new JButton("Record");
-        JButton b2 = new JButton("Play Recording");
-        b1.setBounds(100,140,100,40);
-//        b2.setBounds(100,150,100,40);
+        b1.setPreferredSize(new Dimension(100, 40));
+        GridBagConstraints c1 = new GridBagConstraints();
+        c1.gridx = 0;
+        c1.gridy = 0;
+        pane.add(b1, c1);
 
-//        layout.setAutoCreateGaps(true);
-//        layout.setAutoCreateContainerGaps(true);
-//
-//        layout.setVerticalGroup(
-//                layout.createSequentialGroup()
-//                        .addComponent(b1)
-//                        .addComponent(b2)
-//        );
-//        container.setLayout(layout); // For layout managers
-        f.add(b1);
+        JButton b2 = new JButton("Play Recording");
+        b2.setPreferredSize(new Dimension(150,40));
+        GridBagConstraints c2 = new GridBagConstraints();
+        c2.gridx = 0;
+        c2.gridy = 1;
+        pane.add(b2, c2);
+
+        f.add(pane);
         f.setTitle("New Macro");
+        f.pack();
         f.setSize(windowWidth,windowHeight);
         Point p = new Point((screenSize.width - windowWidth) / 2,
                 (screenSize.height - windowHeight) / 2);
         f.setLocation(p);
         f.setLayout(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
         f.setVisible(true); // make the frame visible
     }
-    // TODO: Program still running in background after closing window. May need to set an Event to terminate the
-    //  process on close
 }
