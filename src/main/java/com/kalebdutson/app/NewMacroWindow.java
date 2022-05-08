@@ -3,7 +3,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class NewMacroWindow {
-    NewMacroWindow() {
+    private Macro m;
+    public NewMacroWindow() {
+        this.m = new Macro();
         this.show();
     }
 
@@ -12,10 +14,10 @@ public class NewMacroWindow {
         int windowHeight = 400;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
-
         JFrame f = new JFrame();
         JPanel pane = new JPanel(new GridBagLayout());
 
+        // TODO: Connect buttons to Macro class for recording and playback
         JButton b1 = new JButton("Record");
         b1.setPreferredSize(new Dimension(100, 40));
         GridBagConstraints c1 = new GridBagConstraints();
@@ -41,4 +43,8 @@ public class NewMacroWindow {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
         f.setVisible(true); // make the frame visible
     }
+    public void recordInput(){
+        this.m.record();
+    }
+
 }
