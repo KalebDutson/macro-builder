@@ -1,3 +1,4 @@
+package com.kalebdutson.app;
 import javax.swing.*;
 import java.awt.*;
 
