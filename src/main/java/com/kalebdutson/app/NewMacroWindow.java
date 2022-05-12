@@ -1,16 +1,20 @@
 package com.kalebdutson.app;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.NativeInputEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 
 public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowListener {
     private Macro m;
+    private boolean ctrlHeld = false;
+    private int[] startHotkey = new int [3];
+    private int[] stopHotkey = new int [3];
 
     public NewMacroWindow(){
         this.m = new Macro();
@@ -35,6 +39,44 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         c2.gridx = 0;
         c2.gridy = 1;
         pane.add(b2, c2);
+
+        JButton b3 = new JButton("Register \"Start Recording\" hotkey");
+        b3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                b3.setPreferredSize(new Dimension(b3.getWidth(), b3.getHeight()));
+                b3.setText("Hello");
+            }
+        });
+        GridBagConstraints c3 = new GridBagConstraints();
+        c3.gridx = 0;
+        c3.gridy = 2;
+        pane.add(b3, c3);
+
+        JButton b4 = new JButton("Register \"Stop Recording\" hotkey");
+        GridBagConstraints c4 = new GridBagConstraints();
+        c4.gridx = 0;
+        c4.gridy = 3;
+        pane.add(b4, c4);
+
+        JLabel t1 = new JLabel("None");
+        GridBagConstraints c5 = new GridBagConstraints();
+        c5.gridx = 1;
+        c5.gridy = 2;
+        pane.add(t1, c5);
+
+        JTextField t2 = new JTextField("None");
+//        t2.
+        t2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("I am active");
+            }
+        });
+        GridBagConstraints c6 = new GridBagConstraints();
+        c6.gridx = 1;
+        c6.gridy = 3;
+        pane.add(t2, c6);
 
         this.add(pane);
         this.setTitle("New Macro");
@@ -97,7 +139,30 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
     public void nativeKeyReleased(NativeKeyEvent e) {
 //        NativeKeyListener.super.nativeKeyReleased(nativeEvent);
         if(e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
-            JOptionPane.showMessageDialog(null, "Space has been pressed");
+//            JOptionPane.showMessageDialog(null, "Space has been pressed");
+            JOptionPane.showConfirmDialog(this, "Input");
+        }
+        else if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
+            this.ctrlHeld = false;
         }
     }
+
+    @Override
+    public void nativeKeyPressed(NativeKeyEvent e){
+        if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
+            this.ctrlHeld = true;
+        }
+        else if(this.ctrlHeld) {
+            if (e.getKeyCode() == NativeKeyEvent.VC_1) {
+                System.out.println("CTRL + 1 pressed");
+            }
+        }
+        System.out.printf("KeyCode: %s%n", e.getKeyCode());
+        System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
+        System.out.printf("Id: %s%n", e.getID());
+        System.out.printf("When: %s%n", e.getWhen());
+        System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
+
+    }
+
 }
