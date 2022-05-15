@@ -28,3 +28,6 @@ hs_err_pid*
 # output
 target
 
+# app config files
+config.txt
+
