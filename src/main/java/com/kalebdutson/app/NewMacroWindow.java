@@ -13,10 +13,11 @@ import java.awt.event.*;
 public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowListener {
     private Macro m;
     private boolean ctrlHeld = false;
-    private int[] startHotkey = new int [3];
-    private int[] stopHotkey = new int [3];
 
-    public NewMacroWindow(){
+    public NewMacroWindow(Config config){
+        // TODO: Load config file for hotkeys
+        // loadConfig();
+
         this.m = new Macro();
         int windowWidth = 400;
         int windowHeight = 400;
@@ -40,43 +41,25 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         c2.gridy = 1;
         pane.add(b2, c2);
 
-        JButton b3 = new JButton("Register \"Start Recording\" hotkey");
+        JButton b3 = new JButton("Edit Hotkeys");
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 b3.setPreferredSize(new Dimension(b3.getWidth(), b3.getHeight()));
-                b3.setText("Hello");
+                // TODO: Open new window to change hotkeys
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1] );
+                    }
+                });
             }
         });
         GridBagConstraints c3 = new GridBagConstraints();
         c3.gridx = 0;
         c3.gridy = 2;
+        c3.gridwidth = 2;
         pane.add(b3, c3);
-
-        JButton b4 = new JButton("Register \"Stop Recording\" hotkey");
-        GridBagConstraints c4 = new GridBagConstraints();
-        c4.gridx = 0;
-        c4.gridy = 3;
-        pane.add(b4, c4);
-
-        JLabel t1 = new JLabel("None");
-        GridBagConstraints c5 = new GridBagConstraints();
-        c5.gridx = 1;
-        c5.gridy = 2;
-        pane.add(t1, c5);
-
-        JTextField t2 = new JTextField("None");
-//        t2.
-        t2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("I am active");
-            }
-        });
-        GridBagConstraints c6 = new GridBagConstraints();
-        c6.gridx = 1;
-        c6.gridy = 3;
-        pane.add(t2, c6);
 
         this.add(pane);
         this.setTitle("New Macro");
@@ -109,7 +92,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
     }
 
     @Override
-    public void windowClosing(WindowEvent e) {    }
+    public void windowClosing(WindowEvent e) {   }
 
     @Override
     public void windowClosed(WindowEvent e) {
