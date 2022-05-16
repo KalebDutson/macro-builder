@@ -1,12 +1,8 @@
 package com.kalebdutson.app;
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.NativeHookException;
-import com.github.kwhat.jnativehook.NativeInputEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -79,16 +75,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
 
     @Override
     public void windowOpened(WindowEvent e) {
-        try{
-            GlobalScreen.registerNativeHook();
-        }
-        catch(NativeHookException ex){
-            System.err.println("There was a problem registering the hook");
-            System.err.println(ex.getMessage());
-            ex.printStackTrace();
-            System.exit(1);
-        }
-        GlobalScreen.addNativeKeyListener(this);
+        App.registerHook(this, "NewMacroWindow");
     }
 
     @Override
@@ -96,14 +83,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
 
     @Override
     public void windowClosed(WindowEvent e) {
-        // Clean up the native hook
-        try {
-            GlobalScreen.unregisterNativeHook();
-        } catch (NativeHookException ex) {
-            throw new RuntimeException(ex);
-        }
-        System.runFinalization();
-        System.exit(0);
+        App.unregisterHook("NewMacroWindow");
     }
 
     @Override
