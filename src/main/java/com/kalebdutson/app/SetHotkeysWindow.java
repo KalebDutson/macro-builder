@@ -1,15 +1,13 @@
 package com.kalebdutson.app;
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.annotation.Native;
+import java.beans.PropertyChangeListener;
 
-public class SetHotkeysWindow extends JDialog implements NativeKeyListener, WindowListener {
+public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, WindowListener{
     private int windowWidth = 200;
     private int windowHeight = 200;
     private Hotkey startHotkey;
@@ -20,7 +18,9 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
     public SetHotkeysWindow(Hotkey startHotkey, Hotkey stopHotkey) {
         this.startHotkey = startHotkey;
         this.stopHotkey = stopHotkey;
+        setDialogListener(this);
         JPanel pane = new JPanel(new GridBagLayout());
+
         JLabel l1 = new JLabel("Start");
         GridBagConstraints c1 = new GridBagConstraints();
         c1.gridx = 0;
@@ -38,12 +38,14 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
         c3.gridx = 0;
         c3.gridy = 1;
         pane.add(t1, c3);
+        setTextFieldListeners(t1);
 
         JTextField t2 = new JTextField(stopHotkey.toString());
         GridBagConstraints c4 = new GridBagConstraints();
         c4.gridx = 1;
         c4.gridy = 1;
         pane.add(t2, c4);
+        setTextFieldListeners(t2);
 
         JButton b1 = new JButton("Cancel");
         GridBagConstraints c5 = new GridBagConstraints();
@@ -72,6 +74,7 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);    // Stop program when ui is closed
         addWindowListener(this);
         this.setVisible(true); // make the frame visible
+        this.requestFocus();
     }
 
     private void setTextFieldListeners(JTextField t) {
@@ -79,7 +82,6 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
         t.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("I've been clicked!");
                 t.setSelectedTextColor(Color.white);
                 t.setCaretPosition(0);
                 t.setText(null);
@@ -87,20 +89,16 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-            }
+            public void mousePressed(MouseEvent e) {}
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-            }
+            public void mouseReleased(MouseEvent e) {}
 
             @Override
-            public void mouseEntered(MouseEvent e) {
-            }
+            public void mouseEntered(MouseEvent e) {}
 
             @Override
-            public void mouseExited(MouseEvent e) {
-            }
+            public void mouseExited(MouseEvent e) {}
         });
         t.addKeyListener(new KeyListener() {
             @Override
@@ -131,17 +129,27 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
         });
     }
 
+    private void setDialogListener(JDialog d){
+        d.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Frame requesting focus");
+                d.requestFocus();
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+    }
+
     @Override
     public void windowOpened(WindowEvent e) {
-        try {
-            GlobalScreen.registerNativeHook();
-        } catch (NativeHookException ex) {
-            System.err.println("Error registering hook");
-            System.err.println(ex.getMessage());
-            ex.printStackTrace();
-            System.exit(2);
-        }
-        GlobalScreen.addNativeKeyListener(this);
+        App.registerHook(this, "SetHotkeysWindow");
     }
 
     @Override
@@ -151,12 +159,7 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
 
     @Override
     public void windowClosed(WindowEvent e) {
-        // Clean up native hook
-        try {
-            GlobalScreen.unregisterNativeHook();
-        } catch (NativeHookException ex) {
-            throw new RuntimeException(ex);
-        }
+        App.unregisterHook("SetHotkeysWindow");
     }
 
     @Override
@@ -183,6 +186,12 @@ public class SetHotkeysWindow extends JDialog implements NativeKeyListener, Wind
     public void nativeKeyReleased(NativeKeyEvent e) {
         // TODO: Implement
         //  Check which hotkey is active
+        System.out.println("SetHotkeysWindow");
+        System.out.printf("KeyCode: %s%n", e.getKeyCode());
+        System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
+        System.out.printf("Id: %s%n", e.getID());
+        System.out.printf("When: %s%n", e.getWhen());
+        System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
     }
 
     @Override

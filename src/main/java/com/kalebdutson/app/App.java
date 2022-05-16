@@ -41,7 +41,5 @@ public class App
             System.err.printf("Encountered error unregistering Nativehook for class: %s%n", classname);
             throw new RuntimeException(ex);
         }
-        System.runFinalization();
-        System.exit(0);
     }
 }

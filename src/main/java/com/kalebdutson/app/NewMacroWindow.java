@@ -5,21 +5,21 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Set;
 
 public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowListener {
     private Macro m;
     private boolean ctrlHeld = false;
+//    private boolean hookRegistered;
 
     public NewMacroWindow(Config config){
         // TODO: Load config file for hotkeys
         // loadConfig();
-
         this.m = new Macro();
         int windowWidth = 400;
         int windowHeight = 400;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
-//        JFrame f = new JFrame();
         JPanel pane = new JPanel(new GridBagLayout());
 
         // TODO: Connect buttons to Macro class for recording and playback
@@ -43,6 +43,9 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
             public void actionPerformed(ActionEvent e) {
                 b3.setPreferredSize(new Dimension(b3.getWidth(), b3.getHeight()));
                 // TODO: Open new window to change hotkeys
+                App.unregisterHook("NewMacroWindow");
+//
+//                new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1]);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -73,43 +76,40 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         this.m.record();
     }
 
+    public void stopRecording(){
+    }
+
     @Override
     public void windowOpened(WindowEvent e) {
         App.registerHook(this, "NewMacroWindow");
     }
-
     @Override
-    public void windowClosing(WindowEvent e) {   }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
+    public void windowClosing(WindowEvent e) {
         App.unregisterHook("NewMacroWindow");
     }
-
+    @Override
+    public void windowClosed(WindowEvent e) {
+        System.runFinalization();
+        System.exit(0);
+    }
     @Override
     public void windowIconified(WindowEvent e) {    }
-
     @Override
     public void windowDeiconified(WindowEvent e) {    }
-
     @Override
     public void windowActivated(WindowEvent e) {    }
-
     @Override
     public void windowDeactivated(WindowEvent e) {    }
 
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
-//        NativeKeyListener.super.nativeKeyReleased(nativeEvent);
         if(e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
-//            JOptionPane.showMessageDialog(null, "Space has been pressed");
             JOptionPane.showConfirmDialog(this, "Input");
         }
         else if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
             this.ctrlHeld = false;
         }
     }
-
     @Override
     public void nativeKeyPressed(NativeKeyEvent e){
         if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
@@ -125,7 +125,6 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         System.out.printf("Id: %s%n", e.getID());
         System.out.printf("When: %s%n", e.getWhen());
         System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
-
     }
 
 }
