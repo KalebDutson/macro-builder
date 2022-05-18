@@ -13,7 +13,8 @@ import java.util.Set;
 public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowListener {
     private Macro m;
     private boolean ctrlHeld = false;
-//    private boolean hookRegistered;
+    private boolean shiftHeld = false;
+    private boolean altHeld = false;
 
     public NewMacroWindow(Config config){
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
@@ -45,16 +46,10 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                b3.setPreferredSize(new Dimension(b3.getWidth(), b3.getHeight()));
                 requestFocus();
                 // Open new window to change hotkeys
-                new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1] );
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1] );
-//                    }
-//                });
+                // TODO: change to dialog instead of window
+                new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1] );;
             }
         });
         GridBagConstraints c3 = new GridBagConstraints();
@@ -78,10 +73,11 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         this.setVisible(true); // make the frame visible
     }
     public void recordInput(){
-        this.m.record();
+        // TODO: connect to Macro class record function
     }
 
     public void stopRecording(){
+        // TODO: connect to Macro class stopRecording function
     }
 
     @Override
@@ -114,11 +110,24 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         else if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
             this.ctrlHeld = false;
         }
+        else if(e.getKeyCode() == NativeKeyEvent.VC_ALT){
+            this.altHeld = false;
+        }
+        else if(e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
+            this.shiftHeld = false;
+        }
+
     }
     @Override
     public void nativeKeyPressed(NativeKeyEvent e){
         if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
             this.ctrlHeld = true;
+        }
+        else if(e.getKeyCode() == NativeKeyEvent.VC_ALT){
+            this.altHeld = true;
+        }
+        else if(e.getKeyCode() == NativeKeyEvent.VC_SHIFT){
+            this.shiftHeld = true;
         }
         else if(this.ctrlHeld) {
             if (e.getKeyCode() == NativeKeyEvent.VC_1) {
