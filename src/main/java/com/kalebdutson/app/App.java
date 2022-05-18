@@ -20,12 +20,12 @@ public class App
                 }
         );
     }
-    public static void registerHook(NativeKeyListener listener, String classname){
+    public static <T> void registerHook(NativeKeyListener listener, Class<T> classType){
         try{
             GlobalScreen.registerNativeHook();
         }
         catch(NativeHookException ex){
-            System.err.printf("There was a problem registering the hook for class: %s%n", classname);
+            System.err.printf("There was a problem registering the hook for class: %s%n", classType.toString());
             System.err.println(ex.getMessage());
             ex.printStackTrace();
             System.exit(1);
@@ -33,12 +33,12 @@ public class App
         GlobalScreen.addNativeKeyListener(listener);
     }
 
-    public static void unregisterHook(String classname){
+    public static <T> void unregisterHook(Class<T> classType){
         // Clean up the native hook
         try {
             GlobalScreen.unregisterNativeHook();
         } catch (NativeHookException ex) {
-            System.err.printf("Encountered error unregistering Nativehook for class: %s%n", classname);
+            System.err.printf("Encountered error unregistering Nativehook for class: %s%n", classType.toString());
             throw new RuntimeException(ex);
         }
     }
