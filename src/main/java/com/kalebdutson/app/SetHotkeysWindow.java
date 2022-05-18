@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
+import java.nio.channels.spi.AbstractInterruptibleChannel;
 
 public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, WindowListener{
     private int windowWidth = 200;
@@ -52,15 +53,25 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
         c5.gridx = 0;
         c5.gridy = 2;
         pane.add(b1, c5);
-        // TODO: Close window
+        b1.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                dispose();
+            }
+        });
 
         JButton b2 = new JButton("Save");
         GridBagConstraints c6 = new GridBagConstraints();
         c6.gridx = 1;
         c6.gridy = 2;
         pane.add(b2, c6);
-        // TODO: add action listener to save hotkey info
-
+        b2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: Save hotkeys to config
+                dispose();
+            }
+        });
         this.add(pane);
         this.setTitle("Register Hotkeys");
         this.pack();
@@ -71,7 +82,7 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
                 (screenSize.height - windowHeight) / 2);
         this.setLocation(p);
         this.setLayout(null);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);    // Stop program when ui is closed
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);    // Stop program when ui is closed
         addWindowListener(this);
         this.setVisible(true); // make the frame visible
         this.requestFocus();
@@ -149,17 +160,18 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
 
     @Override
     public void windowOpened(WindowEvent e) {
-        App.registerHook(this, "SetHotkeysWindow");
+//        App.registerHook(this, "SetHotkeysWindow");
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        // TODO: Save hotkeys to config
+        System.out.println("Window closing");
+        this.dispose();
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-        App.unregisterHook("SetHotkeysWindow");
+        System.out.println("Window closed");
     }
 
     @Override
@@ -196,5 +208,18 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
+    }
+
+    private void disposeParentWindow(ActionEvent e){
+        Component currParent = (Component) e.getSource();
+        while(currParent != null){
+            if (currParent instanceof SetHotkeysWindow){
+                ((Window) currParent).dispose();
+                currParent = null;
+            }
+            else{
+                currParent = currParent.getParent();
+            }
+        }
     }
 }
