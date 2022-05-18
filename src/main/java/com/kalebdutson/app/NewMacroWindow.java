@@ -1,10 +1,13 @@
 package com.kalebdutson.app;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Locale;
 import java.util.Set;
 
 public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowListener {
@@ -13,6 +16,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
 //    private boolean hookRegistered;
 
     public NewMacroWindow(Config config){
+        GlobalScreen.setEventDispatcher(new SwingDispatchService());
         // TODO: Load config file for hotkeys
         // loadConfig();
         this.m = new Macro();
@@ -42,16 +46,15 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
             @Override
             public void actionPerformed(ActionEvent e) {
                 b3.setPreferredSize(new Dimension(b3.getWidth(), b3.getHeight()));
-                // TODO: Open new window to change hotkeys
-                App.unregisterHook("NewMacroWindow");
-//
-//                new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1]);
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1] );
-                    }
-                });
+                requestFocus();
+                // Open new window to change hotkeys
+                new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1] );
+//                SwingUtilities.invokeLater(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        new SetHotkeysWindow(config.getHotkeys()[0], config.getHotkeys()[1] );
+//                    }
+//                });
             }
         });
         GridBagConstraints c3 = new GridBagConstraints();
@@ -70,6 +73,8 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
         addWindowListener(this);
+        setWindowListener();
+        this.requestFocus();
         this.setVisible(true); // make the frame visible
     }
     public void recordInput(){
@@ -81,11 +86,11 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
 
     @Override
     public void windowOpened(WindowEvent e) {
-        App.registerHook(this, "NewMacroWindow");
+        registerHook();
     }
     @Override
     public void windowClosing(WindowEvent e) {
-        App.unregisterHook("NewMacroWindow");
+        unregisterHook();
     }
     @Override
     public void windowClosed(WindowEvent e) {
@@ -120,11 +125,40 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
                 System.out.println("CTRL + 1 pressed");
             }
         }
+        System.out.println("Source Class: NewMacroWindow");
         System.out.printf("KeyCode: %s%n", e.getKeyCode());
         System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
         System.out.printf("Id: %s%n", e.getID());
         System.out.printf("When: %s%n", e.getWhen());
         System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
+    }
+    private void unregisterHook(){
+        App.unregisterHook(this.getClass());
+    }
+    private void registerHook(){
+        App.registerHook(this, this.getClass());
+    }
+
+    /**
+     * Listener to focus the main window when clicked. This takes focus out
+     * of subcomponents after they are clicked.
+     */
+    private void setWindowListener(){
+        JFrame mainWindow = this;
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mainWindow.requestFocus();
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
     }
 
 }
