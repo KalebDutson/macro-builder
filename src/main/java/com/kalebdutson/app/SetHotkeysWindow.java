@@ -1,4 +1,6 @@
 package com.kalebdutson.app;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
@@ -16,9 +18,11 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
     private boolean startActive = false;
     private boolean stopActive = false;
 
-    public SetHotkeysWindow(Hotkey startHotkey, Hotkey stopHotkey) {
-        this.startHotkey = startHotkey;
-        this.stopHotkey = stopHotkey;
+    public SetHotkeysWindow(Window owner, Config config) {
+        super(owner);
+        GlobalScreen.setEventDispatcher(new SwingDispatchService());
+        this.startHotkey = config.getHotkeys()[0];
+        this.stopHotkey = config.getHotkeys()[1];
         setDialogListener(this);
         JPanel pane = new JPanel(new GridBagLayout());
 
@@ -34,13 +38,35 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
         c2.gridy = 0;
         pane.add(l2, c2);
 
+        // Start hotkey text field
         JTextField t1 = new JTextField(startHotkey.toString());
         GridBagConstraints c3 = new GridBagConstraints();
         c3.gridx = 0;
         c3.gridy = 1;
         pane.add(t1, c3);
         setTextFieldListeners(t1);
+//        t1.addKeyListener(new KeyListener() {
+//            @Override
+//            public void keyTyped(KeyEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void keyPressed(KeyEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+////                System.out.println("Set hotkey");
+////                System.out.println(e.getKeyChar());
+////                System.out.println(e.getKeyCode());
+////                NativeKeyEvent.getKeyText(e.getKeyCode());
+//            }
+//        });
 
+
+        // Stop hotkey text field
         JTextField t2 = new JTextField(stopHotkey.toString());
         GridBagConstraints c4 = new GridBagConstraints();
         c4.gridx = 1;
@@ -84,6 +110,7 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
         this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);    // Stop program when ui is closed
         addWindowListener(this);
+        this.setAlwaysOnTop(true);
         this.setVisible(true); // make the frame visible
         this.requestFocus();
     }
@@ -160,11 +187,12 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
 
     @Override
     public void windowOpened(WindowEvent e) {
-//        App.registerHook(this, "SetHotkeysWindow");
+        registerHook();
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
+        unregisterHook();
         System.out.println("Window closing");
         this.dispose();
     }
@@ -180,8 +208,9 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
     }
 
     @Override
-    public void windowDeiconified(WindowEvent e) {
-
+    public void windowDeiconified(WindowEvent e)
+    {
+//        e.getWindow().
     }
 
     @Override
@@ -198,7 +227,7 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
     public void nativeKeyReleased(NativeKeyEvent e) {
         // TODO: Implement
         //  Check which hotkey is active
-        System.out.println("SetHotkeysWindow");
+        System.out.println("Source Class: SetHotkeysWindow");
         System.out.printf("KeyCode: %s%n", e.getKeyCode());
         System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
         System.out.printf("Id: %s%n", e.getID());
@@ -221,5 +250,12 @@ public class SetHotkeysWindow extends JDialog  implements NativeKeyListener, Win
                 currParent = currParent.getParent();
             }
         }
+    }
+    private void registerHook(){
+        App.registerHook(this, this.getClass());
+    }
+
+    private void unregisterHook(){
+        App.unregisterHook(this.getClass());
     }
 }
