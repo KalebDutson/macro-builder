@@ -61,18 +61,18 @@ public class Config {
     public void setHotkeys(Hotkey startHotkey, Hotkey stopHotkey){
         this.startHotkey = startHotkey;
         this.stopHotkey = stopHotkey;
-        properties.put(START_HOTKEY_KEY, Arrays.toString(startHotkey.getKeys()));
-        properties.put(STOP_HOTKEY_KEY, Arrays.toString(stopHotkey.getKeys()));
+        properties.put(START_HOTKEY_KEY, Arrays.toString(startHotkey.getKeys().toArray()));
+        properties.put(STOP_HOTKEY_KEY, Arrays.toString(stopHotkey.getKeys().toArray()));
     }
 
     public void setStartHotkey(Hotkey startHotkey){
         this.startHotkey = startHotkey;
-        properties.put(START_HOTKEY_KEY, Arrays.toString(startHotkey.getKeys()));
+        properties.put(START_HOTKEY_KEY, Arrays.toString(startHotkey.getKeys().toArray()));
     }
 
     public void setStopHotkey(Hotkey stopHotkey){
         this.stopHotkey = stopHotkey;
-        properties.put(STOP_HOTKEY_KEY, Arrays.toString(stopHotkey.getKeys()));
+        properties.put(STOP_HOTKEY_KEY, Arrays.toString(stopHotkey.getKeys().toArray()));
     }
 
     /**
