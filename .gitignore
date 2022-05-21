@@ -31,3 +31,5 @@ target
 # app config files
 config.txt
 
+# Internal documentation
+*docs/
