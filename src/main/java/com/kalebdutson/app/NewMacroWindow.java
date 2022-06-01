@@ -19,7 +19,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
     private boolean altHeld = false;
     private Config config;
     private final boolean debug = false;
-    // TODO: implement this to stop accelerators from menubar to execute when recording keyboard input
+    // TODO: implement this to stop menubar accelerators from executing when recording keyboard input
     private boolean recordingActive;
 
     public NewMacroWindow(Config config){
@@ -254,13 +254,61 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         fileMenu.addSeparator();
         fileMenu.add(settingsItem);
 
+        // TODO
         newItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Has the accelerator worked?");
+                if(!recordingActive) {
+                    System.out.println("newItem Action launched!");
+                }
             }
         });
-
+        // TODO
+        openProjectItem.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(!recordingActive){
+                    System.out.println("openProjectItem Action launched!");
+                }
+            }
+        });
+        // TODO
+        closeProjectItem.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(!recordingActive){
+                    System.out.println("closeProjectItem Action launched!");
+                }
+            }
+        });
+        //TODO
+        saveItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!recordingActive){
+                    System.out.println("saveItem Action launched!");
+                }
+            }
+        });
+        //TODO
+        saveAsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!recordingActive){
+                    System.out.println("saveAsItem Action launched!");
+                }
+            }
+        });
+        //TODO
+        settingsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!recordingActive){
+                    System.out.println("settings Action launched!");
+                }
+            }
+        });
+        
         menuBar.add(fileMenu);
         this.setJMenuBar(menuBar);
     }
