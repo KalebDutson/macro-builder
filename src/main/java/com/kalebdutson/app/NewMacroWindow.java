@@ -223,17 +223,29 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
 
         newItem = new JMenuItem("New", KeyEvent.VK_N);
         newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-        openProjectItem = new JMenuItem("Open", KeyEvent.VK_O);
-        closeProjectItem = new JMenuItem("Close Project", KeyEvent.VK_J);
-        saveItem = new JMenuItem("Save", KeyEvent.VK_S);
-        saveAsItem = new JMenuItem("Save as", KeyEvent.VK_A);
-        settingsItem = new JMenuItem("Settings", KeyEvent.VK_T);
 
+        openProjectItem = new JMenuItem("Open", KeyEvent.VK_O);
+        openProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+
+        closeProjectItem = new JMenuItem("Close Project", KeyEvent.VK_J);
+        closeProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK));
+
+        saveItem = new JMenuItem("Save", KeyEvent.VK_S);
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+
+        saveAsItem = new JMenuItem("Save as", KeyEvent.VK_A);
+        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+
+        settingsItem = new JMenuItem("Settings", KeyEvent.VK_T);
+        settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
+        
         fileMenu.add(newItem);
         fileMenu.add(openProjectItem);
         fileMenu.add(closeProjectItem);
+        fileMenu.addSeparator();
         fileMenu.add(saveItem);
         fileMenu.add(saveAsItem);
+        fileMenu.addSeparator();
         fileMenu.add(settingsItem);
 
         newItem.addActionListener(new ActionListener() {
