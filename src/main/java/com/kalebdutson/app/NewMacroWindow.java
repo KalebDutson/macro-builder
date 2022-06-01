@@ -5,6 +5,8 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
+import javax.swing.event.MenuKeyEvent;
+import javax.swing.event.MenuKeyListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Locale;
@@ -16,6 +18,9 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
     private boolean shiftHeld = false;
     private boolean altHeld = false;
     private Config config;
+    private final boolean debug = false;
+    // TODO: implement this to stop menubar accelerators from executing when recording keyboard input
+    private boolean recordingActive;
 
     public NewMacroWindow(Config config){
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
@@ -23,11 +28,15 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         // TODO: Load config file for hotkeys
         // loadConfig();
         this.m = new Macro();
+        this.recordingActive = false;
         int windowWidth = 400;
         int windowHeight = 400;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         JPanel pane = new JPanel(new GridBagLayout());
+
+        // Initialize menu bar
+        buildMenuBar();
 
         // TODO: Connect buttons to Macro class for recording and playback
         JButton b1 = new JButton("Record");
@@ -123,27 +132,28 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
 
     }
     @Override
-    public void nativeKeyPressed(NativeKeyEvent e){
-        if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
+    public void nativeKeyPressed(NativeKeyEvent e) {
+        if (e.getKeyCode() == NativeKeyEvent.VC_CONTROL) {
             this.ctrlHeld = true;
-        }
-        else if(e.getKeyCode() == NativeKeyEvent.VC_ALT){
+        } else if (e.getKeyCode() == NativeKeyEvent.VC_ALT) {
             this.altHeld = true;
-        }
-        else if(e.getKeyCode() == NativeKeyEvent.VC_SHIFT){
+        } else if (e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
             this.shiftHeld = true;
-        }
-        else if(this.ctrlHeld) {
+        } else if (this.ctrlHeld) {
             if (e.getKeyCode() == NativeKeyEvent.VC_1) {
-                System.out.println("CTRL + 1 pressed");
+                if (this.debug) {
+                    System.out.println("CTRL + 1 pressed");
+                }
             }
         }
-        System.out.println("Source Class: NewMacroWindow");
-        System.out.printf("KeyCode: %s%n", e.getKeyCode());
-        System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
-        System.out.printf("Id: %s%n", e.getID());
-        System.out.printf("When: %s%n", e.getWhen());
-        System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
+        if (this.debug) {
+            System.out.println("Source Class: NewMacroWindow");
+            System.out.printf("KeyCode: %s%n", e.getKeyCode());
+            System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
+            System.out.printf("Id: %s%n", e.getID());
+            System.out.printf("When: %s%n", e.getWhen());
+            System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
+        }
     }
     private void unregisterHook(){
         App.unregisterHook(this.getClass());
@@ -198,5 +208,105 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
         }
+    }
+
+    /**
+     * Initialize the menu bar for the window and associated accelerators and mnemonics
+     */
+    private void buildMenuBar(){
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu;
+        JMenuItem newItem, openProjectItem, closeProjectItem, saveItem, saveAsItem, settingsItem;
+        
+        fileMenu = new JMenu("File");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+
+        newItem = new JMenuItem("New", KeyEvent.VK_N);
+        openProjectItem = new JMenuItem("Open", KeyEvent.VK_O);
+        closeProjectItem = new JMenuItem("Close Project", KeyEvent.VK_J);
+        saveItem = new JMenuItem("Save", KeyEvent.VK_S);
+        saveAsItem = new JMenuItem("Save as", KeyEvent.VK_E);
+        settingsItem = new JMenuItem("Settings", KeyEvent.VK_T);
+
+        newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+        openProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+        closeProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, InputEvent.CTRL_DOWN_MASK));
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+        settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
+
+        newItem.setFont(new Font("Courier", Font.PLAIN, 10));
+        openProjectItem.setFont(new Font("Courier", Font.PLAIN, 10));
+        closeProjectItem.setFont(new Font("Courier", Font.PLAIN, 10));
+        saveItem.setFont(new Font("Courier", Font.PLAIN, 10));
+        saveAsItem.setFont(new Font("Courier", Font.PLAIN, 10));
+        settingsItem.setFont(new Font("Courier", Font.PLAIN, 10));
+
+        fileMenu.add(newItem);
+        fileMenu.add(openProjectItem);
+        fileMenu.add(closeProjectItem);
+        fileMenu.addSeparator();
+        fileMenu.add(saveItem);
+        fileMenu.add(saveAsItem);
+        fileMenu.addSeparator();
+        fileMenu.add(settingsItem);
+
+        // TODO
+        newItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!recordingActive) {
+                    System.out.println("newItem Action launched!");
+                }
+            }
+        });
+        // TODO
+        openProjectItem.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(!recordingActive){
+                    System.out.println("openProjectItem Action launched!");
+                }
+            }
+        });
+        // TODO
+        closeProjectItem.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(!recordingActive){
+                    System.out.println("closeProjectItem Action launched!");
+                }
+            }
+        });
+        //TODO
+        saveItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!recordingActive){
+                    System.out.println("saveItem Action launched!");
+                }
+            }
+        });
+        //TODO
+        saveAsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!recordingActive){
+                    System.out.println("saveAsItem Action launched!");
+                }
+            }
+        });
+        //TODO
+        settingsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!recordingActive){
+                    System.out.println("settings Action launched!");
+                }
+            }
+        });
+
+        menuBar.add(fileMenu);
+        this.setJMenuBar(menuBar);
     }
 }
