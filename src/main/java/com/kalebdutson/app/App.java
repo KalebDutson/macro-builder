@@ -15,7 +15,7 @@ public class App
         SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        new NewMacroWindow(config);
+                        new BuilderWindow(config);
                     }
                 }
         );

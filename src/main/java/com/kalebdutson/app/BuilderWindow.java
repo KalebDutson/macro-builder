@@ -5,14 +5,10 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
-import javax.swing.event.MenuKeyEvent;
-import javax.swing.event.MenuKeyListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Locale;
-import java.util.Set;
 
-public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowListener {
+public class BuilderWindow extends JFrame implements NativeKeyListener, WindowListener {
     private Macro m;
     private boolean ctrlHeld = false;
     private boolean shiftHeld = false;
@@ -22,7 +18,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
     // TODO: implement this to stop menubar accelerators from executing when recording keyboard input
     private boolean recordingActive;
 
-    public NewMacroWindow(Config config){
+    public BuilderWindow(Config config){
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
         this.config = config;
         // TODO: Load config file for hotkeys
@@ -217,7 +213,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu;
         JMenuItem newItem, openProjectItem, closeProjectItem, saveItem, saveAsItem, settingsItem;
-        
+
         fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_F);
 
