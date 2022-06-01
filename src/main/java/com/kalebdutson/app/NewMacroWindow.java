@@ -223,22 +223,28 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
 
         newItem = new JMenuItem("New", KeyEvent.VK_N);
         newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+        newItem.setFont(new Font("Courier", Font.PLAIN, 10));
 
         openProjectItem = new JMenuItem("Open", KeyEvent.VK_O);
         openProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+        openProjectItem.setFont(new Font("Courier", Font.PLAIN, 10));
 
-        closeProjectItem = new JMenuItem("Close Project", KeyEvent.VK_J);
-        closeProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK));
+        closeProjectItem = new JMenuItem("Close Project", KeyEvent.VK_E);
+        closeProjectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+        closeProjectItem.setFont(new Font("Courier", Font.PLAIN, 10));
 
         saveItem = new JMenuItem("Save", KeyEvent.VK_S);
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+        saveItem.setFont(new Font("Courier", Font.PLAIN, 10));
 
         saveAsItem = new JMenuItem("Save as", KeyEvent.VK_A);
         saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+        saveAsItem.setFont(new Font("Courier", Font.PLAIN, 10));
 
         settingsItem = new JMenuItem("Settings", KeyEvent.VK_T);
         settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
-        
+        settingsItem.setFont(new Font("Courier", Font.PLAIN, 10));
+
         fileMenu.add(newItem);
         fileMenu.add(openProjectItem);
         fileMenu.add(closeProjectItem);
@@ -254,6 +260,7 @@ public class NewMacroWindow extends JFrame implements NativeKeyListener, WindowL
                 System.out.println("Has the accelerator worked?");
             }
         });
+
         menuBar.add(fileMenu);
         this.setJMenuBar(menuBar);
     }
