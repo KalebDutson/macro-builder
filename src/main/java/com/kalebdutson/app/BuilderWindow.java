@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class BuilderWindow extends JFrame implements NativeKeyListener, WindowListener {
+    private int windowWidth = 800;
+    private int windowHeight = 600;
     private Macro m;
     private boolean ctrlHeld = false;
     private boolean shiftHeld = false;
@@ -25,61 +27,62 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         // loadConfig();
         this.m = new Macro();
         this.recordingActive = false;
-        int windowWidth = 400;
-        int windowHeight = 400;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
-        JPanel pane = new JPanel(new GridBagLayout());
+        this.setSize(windowWidth, windowHeight);
+        this.setLocation(new Point((screenSize.width - windowWidth) / 2,
+                (screenSize.height - windowHeight) / 2));
+        this.setLayout(new BorderLayout());
+
+
 
         // Initialize menu bar
         buildMenuBar();
 
         // TODO: Connect buttons to Macro class for recording and playback
-        JButton b1 = new JButton("Record");
-        b1.setPreferredSize(new Dimension(100, 40));
-        GridBagConstraints c1 = new GridBagConstraints();
-        c1.gridx = 0;
-        c1.gridy = 0;
-        pane.add(b1, c1);
+//        JButton b1 = new JButton("Record");
+//        b1.setPreferredSize(new Dimension(100, 40));
+//        GridBagConstraints c1 = new GridBagConstraints();
+//        c1.gridx = 0;
+//        c1.gridy = 0;
+//        pane.add(b1, c1);
 
-        JButton b2 = new JButton("Play Recording");
-        b2.setPreferredSize(new Dimension(150,40));
-        GridBagConstraints c2 = new GridBagConstraints();
-        c2.gridx = 0;
-        c2.gridy = 1;
-        pane.add(b2, c2);
 
-        JButton b3 = new JButton("Edit Hotkeys");
+        // Left panel
+        JPanel westPanel = new JPanel();
+        westPanel.setBackground(Color.RED);
+        westPanel.setPreferredSize(new Dimension(windowWidth / 4, windowHeight));
+//        JLabel iterations = new JLabel("Iterations");
+//        JTextField iterationsText = new JTextField();
 
-        b3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                requestFocus();
-                // Open new window to change hotkeys
-                // TODO: change to dialog instead of window
-//                new SetHotkeysWindow(mainWindow, config);
-                launchDialog();
-            }
-        });
-        GridBagConstraints c3 = new GridBagConstraints();
-        c3.gridx = 0;
-        c3.gridy = 2;
-        c3.gridwidth = 2;
-        pane.add(b3, c3);
+//        iterations.setPreferredSize(new Dimension(100, 40));
+//        GridBagConstraints c1 = new GridBagConstraints();
+//        c1.gridx = 0;
+//        c1.gridy = 0;
 
-        this.add(pane);
+//        iterationsText.setPreferredSize(new Dimension(100, 40));
+//        GridBagConstraints c2 = new GridBagConstraints();
+//        c2.gridx = 0;
+//        c2.gridy = 1;
+//        westPanel.add(iterations, c1);
+//        westPanel.add(iterationsText, c2);
+
+        // Right panel
+        JPanel eastPanel = new JPanel(new GridBagLayout());
+        eastPanel.setBackground(Color.GREEN);
+        eastPanel.setPreferredSize(new Dimension(3 * windowWidth / 4, windowHeight));
+
+        this.getContentPane().add(BorderLayout.WEST, westPanel);
+        this.getContentPane().add(BorderLayout.EAST, eastPanel);
         this.setTitle("New Macro");
-        this.pack();
-        this.setSize(windowWidth,windowHeight);
-        Point p = new Point((screenSize.width - windowWidth) / 2,
-                (screenSize.height - windowHeight) / 2);
-        this.setLocation(p);
-        this.setLayout(null);
+//        this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
         addWindowListener(this);
         setWindowListener();
-        this.requestFocus();
+        this.setResizable(false);
         this.setVisible(true); // make the frame visible
+        this.toFront();
+        this.requestFocus();
     }
     public void recordInput(){
         // TODO: connect to Macro class record function
