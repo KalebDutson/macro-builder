@@ -125,10 +125,10 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
 
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
-        if(e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
-            JOptionPane.showConfirmDialog(this, "Input");
-        }
-        else if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
+//        if(e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
+//            JOptionPane.showConfirmDialog(this, "Input");
+//        }
+        if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
             this.ctrlHeld = false;
         }
         else if(e.getKeyCode() == NativeKeyEvent.VC_ALT){
