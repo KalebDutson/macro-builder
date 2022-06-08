@@ -17,8 +17,9 @@ public class PanelOption extends JPanel {
         this.setLayout(new GridBagLayout());
         this.title = title;
         this.setPreferredSize(dim);
-        TitledBorder titledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), title);
+//        TitledBorder titledBorder = BorderFactory.createTitledBorder(
+//                BorderFactory.createBevelBorder(BevelBorder.LOWERED), title);
+        TitledBorder titledBorder = BorderFactory.createTitledBorder(title);
         titledBorder.setTitleFont(titleFont);
         this.setBorder(titledBorder);
 

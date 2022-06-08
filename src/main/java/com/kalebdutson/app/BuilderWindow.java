@@ -41,10 +41,11 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         // Entire Left panel
         JPanel westPanel = new JPanel(new GridBagLayout());
         westPanel.setPreferredSize(new Dimension(this.getWidth() / 4, this.getHeight()));
-        Dimension westLabelDims = new Dimension(100, 20);
         // TODO: add macro name to title border once Macro class fully implemented
+//        TitledBorder titleBorder = BorderFactory.createTitledBorder(
+//                BorderFactory.createBevelBorder(BevelBorder.RAISED), "Macro1");
         TitledBorder titleBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.RAISED), "Macro1");
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Macro1");
         titleBorder.setTitlePosition(TitledBorder.ABOVE_TOP);
         titleBorder.setTitleFont(App.FONT_A_BOLD);
         westPanel.setBorder(titleBorder);
@@ -65,18 +66,58 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         // TODO:
         // Right panel
         JPanel eastPanel = new JPanel(new GridBagLayout());
-        eastPanel.setBackground(Color.GREEN);
         eastPanel.setPreferredSize(new Dimension(3 * windowWidth / 4, windowHeight));
+
+        //TODO:
+        // Top east panel - insert buttons
+        JPanel subpanelEast1 = new JPanel();
+        TitledBorder b1 = BorderFactory.createTitledBorder(
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Buttons Here");
+        b1.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
+        subpanelEast1.setBorder(b1);
+        subpanelEast1.setPreferredSize(new Dimension(eastPanel.getWidth(), 50));
+        GridBagConstraints ec1 = new GridBagConstraints();
+        ec1.gridx = 0;
+        ec1.gridy = 0;
+        ec1.weightx = 0;
+        ec1.weighty = 0;
+        ec1.anchor = GridBagConstraints.FIRST_LINE_START;
+        ec1.fill = GridBagConstraints.HORIZONTAL;
+        eastPanel.add(subpanelEast1, ec1);
+
+        //TODO:
+        // Middle east panel - scrollbar
+        JPanel subpanelEast2 = new JPanel();
+        TitledBorder b2 = BorderFactory.createTitledBorder(
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Scroll Area");
+        b2.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
+        subpanelEast2.setBorder(b2);
         GridBagConstraints ec2 = new GridBagConstraints();
         ec2.gridx = 0;
-        ec2.gridy = 0;
-        ec2.weighty = 1;
+        ec2.gridy = 1;
         ec2.weightx = 1;
+        ec2.weighty = 1;
         ec2.anchor = GridBagConstraints.FIRST_LINE_START;
-        JLabel test = new JLabel("Testing");
-        eastPanel.add(test, ec2);
+        ec2.fill = GridBagConstraints.BOTH;
+        eastPanel.add(subpanelEast2, ec2);
 
-
+        //TODO:
+        // Bottom east panel - add action button
+        JPanel subpanelEast3 = new JPanel();
+        TitledBorder b3 = BorderFactory.createTitledBorder(
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "More Buttons");
+        b3.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
+        subpanelEast3.setBorder(b3);
+        subpanelEast3.setPreferredSize(new Dimension(eastPanel.getWidth(), 40));
+        GridBagConstraints ec3 = new GridBagConstraints();
+        ec3.gridx = 0;
+        ec3.gridy = 2;
+        ec3.weightx = 0;
+        ec3.weighty = 0;
+        ec3.anchor = GridBagConstraints.FIRST_LINE_START;
+        ec3.fill = GridBagConstraints.HORIZONTAL;
+        eastPanel.add(subpanelEast3, ec3);
+        
         this.getContentPane().add(BorderLayout.WEST, westPanel);
         this.getContentPane().add(BorderLayout.EAST, eastPanel);
 
