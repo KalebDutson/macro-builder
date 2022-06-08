@@ -5,6 +5,9 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -23,63 +26,89 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         this.config = config;
         // TODO: Load config file for hotkeys
         // loadConfig();
-        this.m = new Macro();
-        this.recordingActive = false;
-        int windowWidth = 400;
-        int windowHeight = 400;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
-        JPanel pane = new JPanel(new GridBagLayout());
+        this.m = new Macro();
+        this.recordingActive = false;
+        int windowWidth = 800;
+        int windowHeight = 600;
+        this.setSize(windowWidth, windowHeight);
+        this.setLayout(new BorderLayout());
 
         // Initialize menu bar
         buildMenuBar();
 
-        // TODO: Connect buttons to Macro class for recording and playback
-        JButton b1 = new JButton("Record");
-        b1.setPreferredSize(new Dimension(100, 40));
-        GridBagConstraints c1 = new GridBagConstraints();
-        c1.gridx = 0;
-        c1.gridy = 0;
-        pane.add(b1, c1);
+        // Entire Left panel
+        JPanel westPanel = new JPanel(new GridBagLayout());
+        westPanel.setPreferredSize(new Dimension(this.getWidth() / 4, this.getHeight()));
+        Dimension westLabelDims = new Dimension(100, 20);
+        // TODO: add macro name to title border once Macro class fully implemented
+        TitledBorder titleBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createBevelBorder(BevelBorder.RAISED), "Macro1");
+        titleBorder.setTitlePosition(TitledBorder.ABOVE_TOP);
+        titleBorder.setTitleFont(App.FONT_A_BOLD);
+        westPanel.setBorder(titleBorder);
 
-        JButton b2 = new JButton("Play Recording");
-        b2.setPreferredSize(new Dimension(150,40));
-        GridBagConstraints c2 = new GridBagConstraints();
-        c2.gridx = 0;
-        c2.gridy = 1;
-        pane.add(b2, c2);
+        // TODO: create a new class to make adding these options to the west panel easier
+        // Left panel for "Iterations" option
+        JPanel iterationsPanel = new JPanel(new GridBagLayout());
+        iterationsPanel.setPreferredSize(new Dimension(this.getWidth() / 4, 100));
+        TitledBorder iterationsBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Iterations");
+        iterationsBorder.setTitleFont(App.FONT_A_PLAIN);
+        iterationsPanel.setBorder(iterationsBorder);
+        GridBagConstraints panel1Constraints = new GridBagConstraints();
+        panel1Constraints.weightx = 1;
+        panel1Constraints.weighty = 1;
+        panel1Constraints.gridx = 0;
+        panel1Constraints.gridy = 0;
+        panel1Constraints.fill = GridBagConstraints.HORIZONTAL;
+        panel1Constraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        // Text field for iterations variable
+        JTextField iterationsText = new JTextField();
+        iterationsText.setFont(App.FONT_A_PLAIN);
+        iterationsText.setPreferredSize(westLabelDims);
+        GridBagConstraints wc1 = new GridBagConstraints();
+        wc1.weightx = 1;
+        wc1.weighty = 1;
+        wc1.gridx = 0;
+        wc1.gridy = 1;
+        wc1.anchor = GridBagConstraints.FIRST_LINE_START;
+        wc1.fill = GridBagConstraints.HORIZONTAL;
+        iterationsPanel.add(iterationsText, wc1);
+        // Add iterations option panel to west panel
+        westPanel.add(iterationsPanel, panel1Constraints);
 
-        JButton b3 = new JButton("Edit Hotkeys");
+        // TODO:
+        // Right panel
+        JPanel eastPanel = new JPanel(new GridBagLayout());
+        eastPanel.setBackground(Color.GREEN);
+        eastPanel.setPreferredSize(new Dimension(3 * windowWidth / 4, windowHeight));
+        GridBagConstraints ec2 = new GridBagConstraints();
+        ec2.gridx = 0;
+        ec2.gridy = 0;
+        ec2.weighty = 1;
+        ec2.weightx = 1;
+        ec2.anchor = GridBagConstraints.FIRST_LINE_START;
+        JLabel test = new JLabel("Testing");
+        eastPanel.add(test, ec2);
 
-        b3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//                requestFocus();
-                // Open new window to change hotkeys
-                // TODO: change to dialog instead of window
-//                new SetHotkeysWindow(mainWindow, config);
-                launchDialog();
-            }
-        });
-        GridBagConstraints c3 = new GridBagConstraints();
-        c3.gridx = 0;
-        c3.gridy = 2;
-        c3.gridwidth = 2;
-        pane.add(b3, c3);
 
-        this.add(pane);
-        this.setTitle("New Macro");
-        this.pack();
-        this.setSize(windowWidth,windowHeight);
-        Point p = new Point((screenSize.width - windowWidth) / 2,
-                (screenSize.height - windowHeight) / 2);
-        this.setLocation(p);
-        this.setLayout(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
+        this.getContentPane().add(BorderLayout.WEST, westPanel);
+        this.getContentPane().add(BorderLayout.EAST, eastPanel);
+
         addWindowListener(this);
         setWindowListener();
-        this.requestFocus();
+        // TODO: add macro name to title once Macro class fully implemented
+        this.setTitle("Macro1");
+        this.pack();
+        this.setLocation(new Point((screenSize.width - this.getWidth()) / 2,
+                (screenSize.height - this.getHeight()) / 2));
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
+        this.setResizable(false);
         this.setVisible(true); // make the frame visible
+        this.toFront();
+        this.requestFocus();
     }
     public void recordInput(){
         // TODO: connect to Macro class record function
@@ -181,32 +210,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
     }
 
     /**
-     * Build and show a dialog to register new hotkeys for starting and stopping recording
-     */
-    private void launchDialog(){
-        JTextField firstName = new JTextField();
-        JTextField lastName = new JTextField();
-        JPasswordField password = new JPasswordField();
-        final JComponent[] inputs = new JComponent[] {
-                new JLabel("First"),
-                firstName,
-                new JLabel("Last"),
-                lastName,
-                new JLabel("Password"),
-                password
-        };
-        int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.DEFAULT_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            System.out.println("You entered " +
-                    firstName.getText() + ", " +
-                    lastName.getText() + ", " +
-                    password.getText());
-        } else {
-            System.out.println("User canceled / closed the dialog, result = " + result);
-        }
-    }
-
-    /**
      * Initialize the menu bar for the window and associated accelerators and mnemonics
      */
     private void buildMenuBar(){
@@ -231,12 +234,12 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
         settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
 
-        newItem.setFont(new Font("Courier", Font.PLAIN, 10));
-        openProjectItem.setFont(new Font("Courier", Font.PLAIN, 10));
-        closeProjectItem.setFont(new Font("Courier", Font.PLAIN, 10));
-        saveItem.setFont(new Font("Courier", Font.PLAIN, 10));
-        saveAsItem.setFont(new Font("Courier", Font.PLAIN, 10));
-        settingsItem.setFont(new Font("Courier", Font.PLAIN, 10));
+        newItem.setFont(App.FONT_A_PLAIN);
+        openProjectItem.setFont(App.FONT_A_PLAIN);
+        closeProjectItem.setFont(App.FONT_A_PLAIN);
+        saveItem.setFont(App.FONT_A_PLAIN);
+        saveAsItem.setFont(App.FONT_A_PLAIN);
+        settingsItem.setFont(App.FONT_A_PLAIN);
 
         fileMenu.add(newItem);
         fileMenu.add(openProjectItem);
