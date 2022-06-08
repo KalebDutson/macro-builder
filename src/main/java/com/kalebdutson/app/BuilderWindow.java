@@ -49,35 +49,18 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         titleBorder.setTitleFont(App.FONT_A_BOLD);
         westPanel.setBorder(titleBorder);
 
-        // TODO: create a new class to make adding these options to the west panel easier
-        // Left panel for "Iterations" option
-        JPanel iterationsPanel = new JPanel(new GridBagLayout());
-        iterationsPanel.setPreferredSize(new Dimension(this.getWidth() / 4, 100));
-        TitledBorder iterationsBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Iterations");
-        iterationsBorder.setTitleFont(App.FONT_A_PLAIN);
-        iterationsPanel.setBorder(iterationsBorder);
-        GridBagConstraints panel1Constraints = new GridBagConstraints();
-        panel1Constraints.weightx = 1;
-        panel1Constraints.weighty = 1;
-        panel1Constraints.gridx = 0;
-        panel1Constraints.gridy = 0;
-        panel1Constraints.fill = GridBagConstraints.HORIZONTAL;
-        panel1Constraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        // Text field for iterations variable
-        JTextField iterationsText = new JTextField();
-        iterationsText.setFont(App.FONT_A_PLAIN);
-        iterationsText.setPreferredSize(westLabelDims);
-        GridBagConstraints wc1 = new GridBagConstraints();
-        wc1.weightx = 1;
-        wc1.weighty = 1;
-        wc1.gridx = 0;
-        wc1.gridy = 1;
-        wc1.anchor = GridBagConstraints.FIRST_LINE_START;
-        wc1.fill = GridBagConstraints.HORIZONTAL;
-        iterationsPanel.add(iterationsText, wc1);
+        // "Iterations" option panel
+        PanelOption iterationsOption = new PanelOption("Iterations",
+                new Dimension(this.getWidth() / 4, 100), App.FONT_A_PLAIN);
+        GridBagConstraints optionConstraints1 = new GridBagConstraints();
+        optionConstraints1.weightx = 1;
+        optionConstraints1.weighty = 1;
+        optionConstraints1.gridx = 0;
+        optionConstraints1.gridy = 0;
+        optionConstraints1.fill = GridBagConstraints.HORIZONTAL;
+        optionConstraints1.anchor = GridBagConstraints.FIRST_LINE_START;
         // Add iterations option panel to west panel
-        westPanel.add(iterationsPanel, panel1Constraints);
+        westPanel.add(iterationsOption, optionConstraints1);
 
         // TODO:
         // Right panel
