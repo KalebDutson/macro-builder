@@ -5,9 +5,12 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class App
 {
+    static final Font FONT_A_PLAIN = new Font("Courier", Font.PLAIN, 10 );
+    static final Font FONT_A_BOLD = new Font("Courier", Font.BOLD, 12);
     public static void main( String[] args ) {
         Config config = new Config();
         // To run jnativehook, use the invokeLater method since jnativehook doesn't
