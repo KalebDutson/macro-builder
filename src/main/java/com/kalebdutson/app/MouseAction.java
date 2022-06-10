@@ -1,11 +1,13 @@
 package com.kalebdutson.app;
 
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+
 import java.awt.event.MouseEvent;
 
 public class MouseAction extends Action{
     private float positionX;
     private float positionY;
-    private MouseEvent mouseEvent;
+    private NativeMouseEvent mouseEvent;
     /**
      * Creates a MouseAction with a specific screen location.
      * @param event MouseEvent executed for this action.
@@ -13,7 +15,7 @@ public class MouseAction extends Action{
      * @param y Y position of the Action on the screen.
      * @param millis After macro execution, the amount of time until this action is executed.
      */
-    public MouseAction(MouseEvent event, float x, float y, float millis){
+    public MouseAction(NativeMouseEvent event, float x, float y, float millis){
         super(millis);
         if(x < 0) {
             throw new IllegalArgumentException("Must provide a positive value for \"x\"");
@@ -26,11 +28,11 @@ public class MouseAction extends Action{
         this.positionY = y;
     }
 
-    public MouseEvent getMouseEvent(){
+    public NativeMouseEvent getMouseEvent(){
         return this.mouseEvent;
     }
 
-    public void setMouseEvent(MouseEvent event){
+    public void setMouseEvent(NativeMouseEvent event){
         this.mouseEvent = event;
     }
 
