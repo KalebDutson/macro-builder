@@ -5,30 +5,21 @@ import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import java.awt.event.MouseEvent;
 
 public class MouseAction extends Action{
-    private float positionX;
-    private float positionY;
     private NativeMouseEvent mouseEvent;
     /**
      * Creates a MouseAction with a specific screen location.
-     * @param event MouseEvent executed for this action.
-     * @param x X position of the Action on the screen.
-     * @param y Y position of the Action on the screen.
+     * @param event NativeMouseEvent executed for this action.
      * @param millis After macro execution, the amount of time until this action is executed.
      */
-    public MouseAction(NativeMouseEvent event, float x, float y, float millis){
+    public MouseAction(NativeMouseEvent event, float millis){
         super(millis);
-        if(x < 0) {
-            throw new IllegalArgumentException("Must provide a positive value for \"x\"");
-        }
-        if(y < 0){
-            throw new IllegalArgumentException("Must provide a positive value for \"y\"");
+        if(event.getX() < 0 || event.getY() < 0) {
+            throw new IllegalArgumentException("NativeMouseEvent must have positive x and y position.");
         }
         this.mouseEvent = event;
-        this.positionX = x;
-        this.positionY = y;
     }
 
-    public NativeMouseEvent getMouseEvent(){
+    public NativeMouseEvent getNativeMouseEvent(){
         return this.mouseEvent;
     }
 
@@ -36,18 +27,11 @@ public class MouseAction extends Action{
         this.mouseEvent = event;
     }
 
-    public float getPositionX() {
-        return positionX;
+    public int getPositionX() {
+        return mouseEvent.getX();
     }
 
-    public float getPositionY() {
-        return positionY;
-    }
-    public void setPositionX(float x){
-        this.positionX = x;
-    }
-
-    public void setPositionY(float y){
-        this.positionY = y;
+    public int getPositionY() {
+        return mouseEvent.getY();
     }
 }
