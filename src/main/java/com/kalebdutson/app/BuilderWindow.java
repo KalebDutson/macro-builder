@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Element;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -111,6 +112,8 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         JTextArea textArea = new JTextArea();
         JTextArea lines = new JTextArea("1");
         lines.setBackground(Color.GRAY);
+        lines.setFont(App.FONT_WHITE_BOLD);
+        lines.setForeground(Color.WHITE);
         lines.setEditable(false);
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             public String getText(){
