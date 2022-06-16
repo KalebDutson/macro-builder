@@ -8,6 +8,9 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -70,12 +73,12 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
 
         //TODO:
         // Top east panel - insert buttons
-        JPanel subpanelEast1 = new JPanel();
+        JPanel subpanelEastTop = new JPanel();
         TitledBorder b1 = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Buttons Here");
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), " Building Buttons Here");
         b1.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
-        subpanelEast1.setBorder(b1);
-        subpanelEast1.setPreferredSize(new Dimension(eastPanel.getWidth(), 50));
+        subpanelEastTop.setBorder(b1);
+        subpanelEastTop.setPreferredSize(new Dimension(eastPanel.getWidth(), 50));
         GridBagConstraints ec1 = new GridBagConstraints();
         ec1.gridx = 0;
         ec1.gridy = 0;
@@ -83,15 +86,15 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         ec1.weighty = 0;
         ec1.anchor = GridBagConstraints.FIRST_LINE_START;
         ec1.fill = GridBagConstraints.HORIZONTAL;
-        eastPanel.add(subpanelEast1, ec1);
+        eastPanel.add(subpanelEastTop, ec1);
 
         //TODO:
         // Middle east panel - scrollbar
-        JPanel subpanelEast2 = new JPanel();
-        TitledBorder b2 = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Scroll Area");
-        b2.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
-        subpanelEast2.setBorder(b2);
+        JPanel subpanelEastCenter = new JPanel(new GridBagLayout());
+//        TitledBorder b2 = BorderFactory.createTitledBorder(
+//                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Scroll Area");
+//        b2.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
+        subpanelEastCenter.setBorder(new BevelBorder(BevelBorder.LOWERED));
         GridBagConstraints ec2 = new GridBagConstraints();
         ec2.gridx = 0;
         ec2.gridy = 1;
@@ -99,16 +102,61 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         ec2.weighty = 1;
         ec2.anchor = GridBagConstraints.FIRST_LINE_START;
         ec2.fill = GridBagConstraints.BOTH;
-        eastPanel.add(subpanelEast2, ec2);
+        // Scroll pane for macro actions
+        // TODO: Set scroll pane to be non-editable
+        JScrollPane scrollPane =  new JScrollPane();
+
+        // Line numbered text area
+        // TODO: Set numbered lines to take up the whole available area
+        JTextArea textArea = new JTextArea();
+        JTextArea lines = new JTextArea("1");
+        lines.setBackground(Color.GRAY);
+        lines.setEditable(false);
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            public String getText(){
+                int caretPosition = textArea.getDocument().getLength();
+                Element root = textArea.getDocument().getDefaultRootElement();
+                StringBuilder text = new StringBuilder("1" + System.getProperty("line.separator"));
+                for(int i =2; i<root.getElementIndex(caretPosition) + 2; i++){
+                    text.append(i).append(System.getProperty("line.separator"));
+                }
+                return text.toString();
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                lines.setText(getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                lines.setText(getText());
+            }
+            @Override
+            public void changedUpdate(DocumentEvent de){
+                lines.setText(getText());
+            }
+        });
+        scrollPane.getViewport().add(textArea);
+        scrollPane.setRowHeaderView(lines);
+
+        GridBagConstraints scrollConstraints = new GridBagConstraints(); // scroll panel constraints
+        scrollConstraints.gridx = 0;
+        scrollConstraints.gridy = 0;
+        scrollConstraints.weightx = 1;
+        scrollConstraints.weighty = 1;
+        scrollConstraints.fill = GridBagConstraints.BOTH;
+        scrollConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        subpanelEastCenter.add(scrollPane, scrollConstraints); // Add scroll bar to center sub-panel
+        eastPanel.add(subpanelEastCenter, ec2); // add  center sub-panel to east panel
 
         //TODO:
         // Bottom east panel - add action button
-        JPanel subpanelEast3 = new JPanel();
+        JPanel subpanelEastBottom = new JPanel();
         TitledBorder b3 = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "More Buttons");
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Play/Execution Buttons Here");
         b3.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
-        subpanelEast3.setBorder(b3);
-        subpanelEast3.setPreferredSize(new Dimension(eastPanel.getWidth(), 40));
+        subpanelEastBottom.setBorder(b3);
+        subpanelEastBottom.setPreferredSize(new Dimension(eastPanel.getWidth(), 40));
         GridBagConstraints ec3 = new GridBagConstraints();
         ec3.gridx = 0;
         ec3.gridy = 2;
@@ -116,7 +164,7 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         ec3.weighty = 0;
         ec3.anchor = GridBagConstraints.FIRST_LINE_START;
         ec3.fill = GridBagConstraints.HORIZONTAL;
-        eastPanel.add(subpanelEast3, ec3);
+        eastPanel.add(subpanelEastBottom, ec3);
         
         this.getContentPane().add(BorderLayout.WEST, westPanel);
         this.getContentPane().add(BorderLayout.EAST, eastPanel);
