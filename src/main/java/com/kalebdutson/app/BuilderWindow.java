@@ -109,39 +109,65 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
 
         // Line numbered text area
         // TODO: Set numbered lines to take up the whole available area
-        JTextArea textArea = new JTextArea();
-        JTextArea lines = new JTextArea("1");
-        lines.setBackground(Color.GRAY);
-        lines.setFont(App.FONT_WHITE_BOLD);
-        lines.setForeground(Color.WHITE);
-        lines.setEditable(false);
-        textArea.getDocument().addDocumentListener(new DocumentListener() {
-            public String getText(){
-                int caretPosition = textArea.getDocument().getLength();
-                Element root = textArea.getDocument().getDefaultRootElement();
-                StringBuilder text = new StringBuilder("1" + System.getProperty("line.separator"));
-                for(int i =2; i<root.getElementIndex(caretPosition) + 2; i++){
-                    text.append(i).append(System.getProperty("line.separator"));
-                }
-                return text.toString();
-            }
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                lines.setText(getText());
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                lines.setText(getText());
-            }
-            @Override
-            public void changedUpdate(DocumentEvent de){
-                lines.setText(getText());
-            }
-        });
-        scrollPane.getViewport().add(textArea);
-        scrollPane.setRowHeaderView(lines);
-
+//        JTextArea textArea = new JTextArea();
+//        JTextArea lines = new JTextArea("1");
+//        lines.setBackground(Color.GRAY);
+//        lines.setFont(App.FONT_WHITE_BOLD);
+//        lines.setForeground(Color.WHITE);
+//        lines.setEditable(false);
+//        textArea.getDocument().addDocumentListener(new DocumentListener() {
+//            public String getText(){
+//                int caretPosition = textArea.getDocument().getLength();
+//                Element root = textArea.getDocument().getDefaultRootElement();
+//                StringBuilder text = new StringBuilder("1" + System.getProperty("line.separator"));
+//                for(int i =2; i<root.getElementIndex(caretPosition) + 2; i++){
+//                    text.append(i).append(System.getProperty("line.separator"));
+//                }
+//                return text.toString();
+//            }
+//            @Override
+//            public void insertUpdate(DocumentEvent e) {
+//                lines.setText(getText());
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent e) {
+//                lines.setText(getText());
+//            }
+//            @Override
+//            public void changedUpdate(DocumentEvent de){
+//                lines.setText(getText());
+//            }
+//        });
+//        scrollPane.getViewport().add(textArea);
+//        scrollPane.setRowHeaderView(lines);
+//
+        // TODO: Testing new method of creating numbered lines in the scroll area
+        JPanel tmp = new JPanel(new GridBagLayout());
+        JTextField header = new JTextField("1");
+        header.setBackground(Color.GRAY);
+        header.setFont(App.FONT_WHITE_BOLD);
+        header.setForeground(Color.WHITE);
+        header.setEditable(false);
+        JTextField textLine = new JTextField("hello");
+        GridBagConstraints t1 = new GridBagConstraints();
+        t1.gridx = 0;
+        t1.gridy = 0;
+        t1.weightx = 0;
+        t1.weighty = 0;
+        t1.fill = GridBagConstraints.NONE;
+        t1.anchor = GridBagConstraints.FIRST_LINE_START;
+        tmp.add(header, t1);
+        GridBagConstraints t2 = new GridBagConstraints();
+        t2.gridx = 1;
+        t2.gridy = 0;
+        t2.weightx = 1;
+        t2.weighty = 1;
+        t2.fill = GridBagConstraints.HORIZONTAL;
+        t2.anchor = GridBagConstraints.FIRST_LINE_START;
+        tmp.add(textLine, t2);
+        scrollPane.getViewport().add(tmp);
+        // Add scroll pane to window
         GridBagConstraints scrollConstraints = new GridBagConstraints(); // scroll panel constraints
         scrollConstraints.gridx = 0;
         scrollConstraints.gridy = 0;
@@ -151,6 +177,8 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         scrollConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         subpanelEastCenter.add(scrollPane, scrollConstraints); // Add scroll bar to center sub-panel
         eastPanel.add(subpanelEastCenter, ec2); // add  center sub-panel to east panel
+
+
 
         //TODO:
         // Bottom east panel - add action button
