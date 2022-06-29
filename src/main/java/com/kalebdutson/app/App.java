@@ -11,7 +11,7 @@ public class App
 {
     static final Font FONT_A_PLAIN = new Font("Courier", Font.PLAIN, 10 );
     static final Font FONT_A_BOLD = new Font("Courier", Font.BOLD, 12);
-    static final Font FONT_WHITE_BOLD = new Font("Courier", Font.BOLD, 12);
+    static final Font FONT_WHITE_BOLD = new Font("Courier", Font.BOLD, 10);
 
     public static void main( String[] args ) {
         Config config = new Config();
