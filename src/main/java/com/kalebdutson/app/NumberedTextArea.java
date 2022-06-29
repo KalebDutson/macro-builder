@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
-public class NumberedArea extends JPanel {
+public class NumberedTextArea extends JPanel {
     private int rows;
 
     /**
      * Initialize an empty NumberedArea with a specified number of rows
      * @param rows Number of rows to create
      */
-    public NumberedArea(int rows){
+    public NumberedTextArea(int rows){
         this.setLayout(new GridBagLayout());
 
         NumberedTextField one = new NumberedTextField(1, "Hello");
