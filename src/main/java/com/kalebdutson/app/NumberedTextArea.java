@@ -2,15 +2,16 @@ package com.kalebdutson.app;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
-public class NumberedArea extends JPanel {
+public class NumberedTextArea extends JPanel {
     private int rows;
 
     /**
      * Initialize an empty NumberedArea with a specified number of rows
      * @param rows Number of rows to create
      */
-    public NumberedArea(int rows){
+    public NumberedTextArea(int rows){
         this.setLayout(new GridBagLayout());
 
         NumberedTextField one = new NumberedTextField(1, "Hello");
@@ -65,7 +66,6 @@ public class NumberedArea extends JPanel {
 
         for(int i=0; i<rows; i++){
             NumberedTextField numberedTextField = new NumberedTextField(i+1, "");
-
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.gridx = 0;
             constraints.gridy = i;
@@ -78,7 +78,9 @@ public class NumberedArea extends JPanel {
             }
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.anchor = GridBagConstraints.FIRST_LINE_START;
-            this.add(numberedTextField, constraints);
+            // Save constraints to class so they can be updated when adding new rows
+            numberedTextField.setConstraints(constraints);
+            this.add(numberedTextField, numberedTextField.getConstraints());
         }
     }
 
@@ -90,20 +92,96 @@ public class NumberedArea extends JPanel {
     public NumberedTextField getTextComponent(int n){
         return (NumberedTextField) this.getComponent(n);
     }
+
+    /**
+     * Append a new NumberedTextField to the last position of NumberedArea's child components
+     * @param t Text for NumberedTextField
+     */
+    public void appendRow(String t){
+        // Update constraints for last component
+        if(this.getComponentCount() > 0) {
+            NumberedTextField last = (NumberedTextField) this.getComponent(this.getComponentCount() - 1);
+            last.getConstraints().weightx = 0;
+            last.getConstraints().weighty = 0;
+            this.remove(last);
+            this.add(last, last.getConstraints());
+        }
+
+        // Add new component to end of the list
+        NumberedTextField newField = new NumberedTextField(this.getComponentCount(), t);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = this.getComponentCount();
+        c.weightx = 1;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        newField.setConstraints(c);
+        this.add(newField, newField.getConstraints());
+    }
+
+    /**
+     * Insert a new NumberedTextField at specified index in the NumberedArea
+     * @param i Index to insert new row at
+     * @param t Text for NumberedTextField
+     */
+    public void insertRow(int i, String t){
+        if(i >= this.getComponentCount() || i < 0){
+            throw new IndexOutOfBoundsException(String.format("Index \"%s\" out of bounds for Component array size of \"%s\"", i, this.getComponentCount()));
+        }
+        else if(i == this.getComponentCount() - 1){
+            this.appendRow(t);
+        }
+        else{
+            // Get slice of component array for all after index i
+            Component[] trailingComponents = Arrays.copyOfRange(this.getComponents(), i, this.getComponentCount());
+            System.out.printf("TrailingComponents length: %s\n", trailingComponents.length);
+
+            // Insert new row in correct position
+            NumberedTextField newField = new NumberedTextField(i, t);
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = i;
+            constraints.weightx = 0;
+            constraints.weighty = 0;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.anchor = GridBagConstraints.FIRST_LINE_START;
+            newField.setConstraints(constraints);
+            this.add(newField, newField.getConstraints());
+
+            // Update all components after index i
+            for(Component comp: trailingComponents){
+                NumberedTextField textField = (NumberedTextField) comp;
+                textField.setNumberHeader(Integer.parseInt(textField.getNumberHeader()) + 1);
+                textField.getConstraints().gridy = textField.getConstraints().gridy + 1;
+                this.add(textField, textField.getConstraints());
+            }
+        }
+    }
 }
 class NumberedTextField extends JPanel {
     private JTextField numberHeader;
     private JTextField text;
+    private GridBagConstraints constraints; // Constraints for the class as a whole
 
+    /**
+     * Create a new instance of NumberedTextField with the specified number and text.
+     * @param n The numbered header to be displayed.
+     * @param t Text to be displayed
+     */
     NumberedTextField(int n, String t){
         this.setLayout(new GridBagLayout());
+        this.constraints = new GridBagConstraints();
+
         numberHeader = new JTextField(String.valueOf(n));
         numberHeader.setBackground(Color.GRAY);
         numberHeader.setFont(App.FONT_WHITE_BOLD);
         numberHeader.setForeground(Color.WHITE);
         numberHeader.setEditable(false);
+        numberHeader.setBorder(BorderFactory.createEmptyBorder());
         text = new JTextField(t);
         text.setFont(App.FONT_A_PLAIN);
+        text.setBorder(BorderFactory.createEmptyBorder());
 
         GridBagConstraints c1 = new GridBagConstraints();
         c1.gridx = 0;
@@ -111,7 +189,7 @@ class NumberedTextField extends JPanel {
         c1.weightx = 0;
         c1.weighty = 0;
         c1.ipadx = calcPadding(n);
-        c1.fill = GridBagConstraints.NONE;
+        c1.fill = GridBagConstraints.VERTICAL;
         c1.anchor = GridBagConstraints.FIRST_LINE_START;
         this.add(numberHeader, c1);
 
@@ -120,7 +198,7 @@ class NumberedTextField extends JPanel {
         c2.gridy = 0;
         c2.weightx = 1;
         c2.weighty = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.fill = GridBagConstraints.BOTH;
         c2.anchor = GridBagConstraints.FIRST_LINE_START;
         this.add(text, c2);
     }
@@ -148,9 +226,7 @@ class NumberedTextField extends JPanel {
         if (n < 1000) {
             y += 1;
         }
-        int padding = (int) Math.floor((4-x)*6 - y);
-        System.out.printf("i:%s: n:%s | Pad: %s\n", i, n, padding);
-        return padding;
+        return (int) Math.floor((4-x)*6 - y);
     }
 
     public void setText(String t) {
@@ -165,6 +241,16 @@ class NumberedTextField extends JPanel {
     }
     public String getNumberHeader(){
         return this.numberHeader.getText();
+    }
+    public void setNumberHeader(int n){
+        this.numberHeader.setText(String.valueOf(n));
+    }
+    public GridBagConstraints getConstraints(){
+        return this.constraints;
+    }
+
+    public void setConstraints(GridBagConstraints constraints) {
+        this.constraints = constraints;
     }
 }
 
