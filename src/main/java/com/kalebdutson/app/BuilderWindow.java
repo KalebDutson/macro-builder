@@ -6,12 +6,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Element;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -46,8 +41,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         JPanel westPanel = new JPanel(new GridBagLayout());
         westPanel.setPreferredSize(new Dimension(this.getWidth() / 4, this.getHeight()));
         // TODO: add macro name to title border once Macro class fully implemented
-//        TitledBorder titleBorder = BorderFactory.createTitledBorder(
-//                BorderFactory.createBevelBorder(BevelBorder.RAISED), "Macro1");
         TitledBorder titleBorder = BorderFactory.createTitledBorder(
                 BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Macro1");
         titleBorder.setTitlePosition(TitledBorder.ABOVE_TOP);
@@ -92,9 +85,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         //TODO:
         // Middle east panel - scrollbar
         JPanel subpanelEastCenter = new JPanel(new GridBagLayout());
-//        TitledBorder b2 = BorderFactory.createTitledBorder(
-//                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Scroll Area");
-//        b2.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
         subpanelEastCenter.setBorder(new BevelBorder(BevelBorder.LOWERED));
         GridBagConstraints ec2 = new GridBagConstraints();
         ec2.gridx = 0;
@@ -103,72 +93,13 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         ec2.weighty = 1;
         ec2.anchor = GridBagConstraints.FIRST_LINE_START;
         ec2.fill = GridBagConstraints.BOTH;
+
         // Scroll pane for macro actions
-        // TODO: Set scroll pane to be non-editable
         JScrollPane scrollPane =  new JScrollPane();
+        // TODO: Add button to add a new row to the NumberedTextArea
+        NumberedTextArea numberedTextArea = new NumberedTextArea(0);
+        scrollPane.getViewport().add(numberedTextArea);
 
-        // Line numbered text area
-        // TODO: Set numbered lines to take up the whole available area
-//        JTextArea textArea = new JTextArea();
-//        JTextArea lines = new JTextArea("1");
-//        lines.setBackground(Color.GRAY);
-//        lines.setFont(App.FONT_WHITE_BOLD);
-//        lines.setForeground(Color.WHITE);
-//        lines.setEditable(false);
-//        textArea.getDocument().addDocumentListener(new DocumentListener() {
-//            public String getText(){
-//                int caretPosition = textArea.getDocument().getLength();
-//                Element root = textArea.getDocument().getDefaultRootElement();
-//                StringBuilder text = new StringBuilder("1" + System.getProperty("line.separator"));
-//                for(int i =2; i<root.getElementIndex(caretPosition) + 2; i++){
-//                    text.append(i).append(System.getProperty("line.separator"));
-//                }
-//                return text.toString();
-//            }
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                lines.setText(getText());
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                lines.setText(getText());
-//            }
-//            @Override
-//            public void changedUpdate(DocumentEvent de){
-//                lines.setText(getText());
-//            }
-//        });
-//        scrollPane.getViewport().add(textArea);
-//        scrollPane.setRowHeaderView(lines);
-//
-        // TODO: Testing new method of creating numbered lines in the scroll area
-//        JPanel tmp = new JPanel(new GridBagLayout());
-//        JTextField header = new JTextField("1");
-//        header.setBackground(Color.GRAY);
-//        header.setFont(App.FONT_WHITE_BOLD);
-//        header.setForeground(Color.WHITE);
-//        header.setEditable(false);
-//        JTextField textLine = new JTextField("hello");
-//        GridBagConstraints t1 = new GridBagConstraints();
-//        t1.gridx = 0;
-//        t1.gridy = 0;
-//        t1.weightx = 0;
-//        t1.weighty = 0;
-//        t1.fill = GridBagConstraints.NONE;
-//        t1.anchor = GridBagConstraints.FIRST_LINE_START;
-//        tmp.add(header, t1);
-//        GridBagConstraints t2 = new GridBagConstraints();
-//        t2.gridx = 1;
-//        t2.gridy = 0;
-//        t2.weightx = 1;
-//        t2.weighty = 1;
-//        t2.fill = GridBagConstraints.HORIZONTAL;
-//        t2.anchor = GridBagConstraints.FIRST_LINE_START;
-//        tmp.add(textLine, t2);
-        NumberedArea tmp = new NumberedArea(10);
-
-        scrollPane.getViewport().add(tmp);
         // Add scroll pane to window
         GridBagConstraints scrollConstraints = new GridBagConstraints(); // scroll panel constraints
         scrollConstraints.gridx = 0;
@@ -179,8 +110,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         scrollConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         subpanelEastCenter.add(scrollPane, scrollConstraints); // Add scroll bar to center sub-panel
         eastPanel.add(subpanelEastCenter, ec2); // add  center sub-panel to east panel
-
-
 
         //TODO:
         // Bottom east panel - add action button
