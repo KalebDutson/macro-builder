@@ -171,6 +171,7 @@ class NumberedTextField extends JPanel {
      */
     NumberedTextField(int n, String t){
         this.setLayout(new GridBagLayout());
+        this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         this.constraints = new GridBagConstraints();
 
         numberHeader = new JTextField(String.valueOf(n));
@@ -182,6 +183,7 @@ class NumberedTextField extends JPanel {
         text = new JTextField(t);
         text.setFont(App.FONT_A_PLAIN);
         text.setBorder(BorderFactory.createEmptyBorder());
+        text.setEditable(false);
 
         GridBagConstraints c1 = new GridBagConstraints();
         c1.gridx = 0;
