@@ -60,19 +60,13 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         // Add iterations option panel to west panel
         westPanel.add(iterationsOption, optionConstraints1);
 
-        // TODO:
-        // Right panel
+        // Right panel - Holds Spacer, ScrollArea and Lower Button area
         JPanel eastPanel = new JPanel(new GridBagLayout());
         eastPanel.setPreferredSize(new Dimension(3 * windowWidth / 4, windowHeight));
 
-        //TODO:
-        // Top east panel - insert buttons
-        JPanel subpanelEastTop = new JPanel();
-        TitledBorder b1 = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), " Building Buttons Here");
-        b1.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
-        subpanelEastTop.setBorder(b1);
-        subpanelEastTop.setPreferredSize(new Dimension(eastPanel.getWidth(), 50));
+        // Top Spacer to separate scroll area from top of window
+        JPanel topEastSpacer = new JPanel();
+        topEastSpacer.setPreferredSize(new Dimension(eastPanel.getWidth(), 16));
         GridBagConstraints ec1 = new GridBagConstraints();
         ec1.gridx = 0;
         ec1.gridy = 0;
@@ -80,9 +74,8 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         ec1.weighty = 0;
         ec1.anchor = GridBagConstraints.FIRST_LINE_START;
         ec1.fill = GridBagConstraints.HORIZONTAL;
-        eastPanel.add(subpanelEastTop, ec1);
+        eastPanel.add(topEastSpacer, ec1);
 
-        //TODO:
         // Middle east panel - scrollbar
         JPanel subpanelEastCenter = new JPanel(new GridBagLayout());
         subpanelEastCenter.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -96,8 +89,8 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
 
         // Scroll pane for macro actions
         JScrollPane scrollPane =  new JScrollPane();
-        // TODO: Add button to add a new row to the NumberedTextArea
-        NumberedTextArea numberedTextArea = new NumberedTextArea(0);
+        NumberedTextArea numberedTextArea = new NumberedTextArea(1);
+        numberedTextArea.setBackground(Color.white);
         scrollPane.getViewport().add(numberedTextArea);
 
         // Add scroll pane to window
@@ -111,13 +104,9 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         subpanelEastCenter.add(scrollPane, scrollConstraints); // Add scroll bar to center sub-panel
         eastPanel.add(subpanelEastCenter, ec2); // add  center sub-panel to east panel
 
-        //TODO:
-        // Bottom east panel - add action button
-        JPanel subpanelEastBottom = new JPanel();
-        TitledBorder b3 = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Play/Execution Buttons Here");
-        b3.setTitlePosition(TitledBorder.ABOVE_BOTTOM);
-        subpanelEastBottom.setBorder(b3);
+        // Bottom east panel - home of buttons
+        JPanel subpanelEastBottom = new JPanel(new GridBagLayout());
+        subpanelEastBottom.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         subpanelEastBottom.setPreferredSize(new Dimension(eastPanel.getWidth(), 40));
         GridBagConstraints ec3 = new GridBagConstraints();
         ec3.gridx = 0;
@@ -126,8 +115,38 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         ec3.weighty = 0;
         ec3.anchor = GridBagConstraints.FIRST_LINE_START;
         ec3.fill = GridBagConstraints.HORIZONTAL;
+        // Todo: Insert action before button - add functionality
+        JButton iBeforeBtn = new JButton("Insert Before");
+        GridBagConstraints bc1 = new GridBagConstraints();
+        bc1.gridx = 0;
+        bc1.gridy = 0;
+        bc1.weightx = 0;
+        bc1.weighty = 0;
+        bc1.anchor = GridBagConstraints.FIRST_LINE_START;
+        bc1.insets = new Insets(3, 3, 0, 0);
+        subpanelEastBottom.add(iBeforeBtn, bc1);
+        // Todo: Insert action after button - add functionality
+        JButton iAfterBtn = new JButton("Insert After");
+        GridBagConstraints bc2 = new GridBagConstraints();
+        bc2.gridx = 1;
+        bc2.gridy = 0;
+        bc2.weightx = 1;
+        bc2.weighty = 0;
+        bc2.anchor = GridBagConstraints.FIRST_LINE_START;
+        bc2.insets = new Insets(3, 3, 0, 0);
+        subpanelEastBottom.add(iAfterBtn, bc2);
+        // Todo: Run Macro button - add functionality
+        JButton runBtn = new JButton("Run Macro");
+        GridBagConstraints bc3 = new GridBagConstraints();
+        bc3.gridx = 2;
+        bc3.gridy = 0;
+        bc3.weightx = 0;
+        bc3.weighty = 0;
+        bc3.anchor = GridBagConstraints.FIRST_LINE_END;
+        bc3.insets = new Insets(3, 0, 0, 3);
+        subpanelEastBottom.add(runBtn, bc3);
+
         eastPanel.add(subpanelEastBottom, ec3);
-        
         this.getContentPane().add(BorderLayout.WEST, westPanel);
         this.getContentPane().add(BorderLayout.EAST, eastPanel);
 
