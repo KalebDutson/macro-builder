@@ -1,11 +1,12 @@
-package com.kalebdutson.app;
+package com.kalebdutson.app.views;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
+import com.kalebdutson.app.App;
+import com.kalebdutson.app.Config;
+import com.kalebdutson.app.NumberedTextArea;
+import com.kalebdutson.app.PanelOption;
+import com.kalebdutson.app.models.Macro;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -25,6 +26,7 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
 
     public BuilderWindow(Config config){
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
+        // TODO: Might be better to associate the config the with App class since it is all global info.
         this.config = config;
         // TODO: Load config file for hotkeys
         // loadConfig();
@@ -166,14 +168,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         this.toFront();
         this.requestFocus();
     }
-    public void recordInput(){
-        // TODO: connect to Macro class record function
-    }
-
-    public void stopRecording(){
-        // TODO: connect to Macro class stopRecording function
-    }
-
     @Override
     public void windowOpened(WindowEvent e) {
         registerHook();

@@ -1,9 +1,11 @@
-package com.kalebdutson.app;
+package com.kalebdutson.app.controllers;
+
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 
-
-public class Macro {
-
+/**
+ * Controls all data flowing between Views and Models
+ */
+public class Controller {
     /**
      * Record mouse and keystrokes until termination hotkey is pressed
      */
@@ -14,6 +16,11 @@ public class Macro {
         System.out.println(e.getPoint());
 
     }
+
+    public void stopRecording(){
+
+    }
+
     /**
      * Playback the recorded mouse and keystrokes.
      */
@@ -21,6 +28,4 @@ public class Macro {
     public void playback(){
 
     }
-
-
 }

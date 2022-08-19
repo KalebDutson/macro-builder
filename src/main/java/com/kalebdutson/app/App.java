@@ -2,16 +2,18 @@ package com.kalebdutson.app;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.kalebdutson.app.views.BuilderWindow;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class App
 {
-    static final boolean DEBUG = true;
-    static final boolean MOVE_DEBUG = false;
-    static final Font FONT_A_PLAIN = new Font("Courier", Font.PLAIN, 10 );
-    static final Font FONT_A_BOLD = new Font("Courier", Font.BOLD, 12);
-    static final Font FONT_WHITE_BOLD = new Font("Courier", Font.BOLD, 10);
+    public static final boolean DEBUG = true;
+    public static final boolean MOVE_DEBUG = false;
+    public static final Font FONT_A_PLAIN = new Font("Courier", Font.PLAIN, 10 );
+    public static final Font FONT_A_BOLD = new Font("Courier", Font.BOLD, 12);
+    public static final Font FONT_WHITE_BOLD = new Font("Courier", Font.BOLD, 10);
 
     public static void main( String[] args ) {
         Config config = new Config();
