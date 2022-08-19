@@ -3,6 +3,9 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -10,13 +13,13 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-public class BuilderWindow extends JFrame implements NativeKeyListener, WindowListener {
+public class BuilderWindow extends JFrame implements NativeKeyListener, NativeMouseInputListener, WindowListener {
     private Macro m;
     private boolean ctrlHeld = false;
     private boolean shiftHeld = false;
     private boolean altHeld = false;
     private Config config;
-    private final boolean debug = false;
+    private final boolean debug = true;
     // TODO: implement this to stop menubar accelerators from executing when recording keyboard input
     private boolean recordingActive;
 
@@ -192,7 +195,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
     public void windowActivated(WindowEvent e) {    }
     @Override
     public void windowDeactivated(WindowEvent e) {    }
-
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
 //        if(e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
@@ -224,7 +226,9 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
                 }
             }
         }
+        // TODO: testing
         if (this.debug) {
+            System.out.println("--- NativeKeyEvent ---");
             System.out.println("Source Class: NewMacroWindow");
             System.out.printf("KeyCode: %s%n", e.getKeyCode());
             System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
@@ -233,6 +237,8 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
             System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
         }
     }
+
+
     private void unregisterHook(){
         App.unregisterHook(this.getClass());
     }

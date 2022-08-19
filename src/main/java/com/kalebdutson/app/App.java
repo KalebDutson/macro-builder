@@ -1,14 +1,13 @@
 package com.kalebdutson.app;
-
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class App
 {
+    static final boolean DEBUG = true;
     static final Font FONT_A_PLAIN = new Font("Courier", Font.PLAIN, 10 );
     static final Font FONT_A_BOLD = new Font("Courier", Font.BOLD, 12);
     static final Font FONT_WHITE_BOLD = new Font("Courier", Font.BOLD, 10);
@@ -36,6 +35,10 @@ public class App
             System.exit(1);
         }
         GlobalScreen.addNativeKeyListener(listener);
+        // register mouse event listener
+        InputMouseListener mouseListener = new InputMouseListener();
+        GlobalScreen.addNativeMouseListener(mouseListener);
+        GlobalScreen.addNativeMouseMotionListener(mouseListener);
     }
 
     public static <T> void unregisterHook(Class<T> classType){
