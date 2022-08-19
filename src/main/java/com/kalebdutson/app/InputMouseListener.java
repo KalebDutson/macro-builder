@@ -5,17 +5,16 @@ public class InputMouseListener implements NativeMouseInputListener{
 
     @Override
     public void nativeMouseMoved(NativeMouseEvent e){
-        if(App.DEBUG){
-            System.out.println("Mouse Moved - NativeMouseEvent");
-            System.out.printf("Pos: (%s, %s)%n", e.getX(), e.getY());
+        if(App.DEBUG && App.MOVE_DEBUG){
+            System.out.printf("Mouse MOVED - NativeMouseEvent Pos: (%s, %s)%n", e.getX(), e.getY());
         }
     }
 
     @Override
+    // Drag events are a "Click and Hold while moving the mouse"
     public void nativeMouseDragged(NativeMouseEvent e){
-        if(App.DEBUG){
-            System.out.println("Mouse Dragged - NativeMouseEvent");
-            System.out.printf("Pos: (%s, %s)%n", e.getX(), e.getY());
+        if(App.DEBUG && App.MOVE_DEBUG){
+            System.out.printf("Mouse DRAGGED - NativeMouseEvent: (%s, %s)%n", e.getX(), e.getY());
         }
     }
 

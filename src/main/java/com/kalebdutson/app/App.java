@@ -8,6 +8,7 @@ import java.awt.*;
 public class App
 {
     static final boolean DEBUG = true;
+    static final boolean MOVE_DEBUG = false;
     static final Font FONT_A_PLAIN = new Font("Courier", Font.PLAIN, 10 );
     static final Font FONT_A_BOLD = new Font("Courier", Font.BOLD, 12);
     static final Font FONT_WHITE_BOLD = new Font("Courier", Font.BOLD, 10);
