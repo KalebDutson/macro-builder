@@ -3,6 +3,7 @@ package com.kalebdutson.app;
 import java.awt.*;
 
 /**
+ * TODO: Class may be redundant
  * Input action from the keyboard or mouse
  */
 public abstract class Action {
