@@ -13,7 +13,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-public class BuilderWindow extends JFrame implements NativeKeyListener, NativeMouseInputListener, WindowListener {
+public class BuilderWindow extends JFrame implements NativeKeyListener, WindowListener {
     private Macro m;
     private boolean ctrlHeld = false;
     private boolean shiftHeld = false;
@@ -195,49 +195,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, NativeMo
     public void windowActivated(WindowEvent e) {    }
     @Override
     public void windowDeactivated(WindowEvent e) {    }
-    @Override
-    public void nativeKeyReleased(NativeKeyEvent e) {
-//        if(e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
-//            JOptionPane.showConfirmDialog(this, "Input");
-//        }
-        if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
-            this.ctrlHeld = false;
-        }
-        else if(e.getKeyCode() == NativeKeyEvent.VC_ALT){
-            this.altHeld = false;
-        }
-        else if(e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
-            this.shiftHeld = false;
-        }
-
-    }
-    @Override
-    public void nativeKeyPressed(NativeKeyEvent e) {
-        if (e.getKeyCode() == NativeKeyEvent.VC_CONTROL) {
-            this.ctrlHeld = true;
-        } else if (e.getKeyCode() == NativeKeyEvent.VC_ALT) {
-            this.altHeld = true;
-        } else if (e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
-            this.shiftHeld = true;
-        } else if (this.ctrlHeld) {
-            if (e.getKeyCode() == NativeKeyEvent.VC_1) {
-                if (this.debug) {
-                    System.out.println("CTRL + 1 pressed");
-                }
-            }
-        }
-        // TODO: testing
-        if (this.debug) {
-            System.out.println("--- NativeKeyEvent ---");
-            System.out.println("Source Class: NewMacroWindow");
-            System.out.printf("KeyCode: %s%n", e.getKeyCode());
-            System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
-            System.out.printf("Id: %s%n", e.getID());
-            System.out.printf("When: %s%n", e.getWhen());
-            System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
-        }
-    }
-
 
     private void unregisterHook(){
         App.unregisterHook(this.getClass());

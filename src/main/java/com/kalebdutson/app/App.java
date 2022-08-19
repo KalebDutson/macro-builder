@@ -36,6 +36,9 @@ public class App
             System.exit(1);
         }
         GlobalScreen.addNativeKeyListener(listener);
+        // register key event listener
+        InputKeyListener keyListener = new InputKeyListener();
+        GlobalScreen.addNativeKeyListener(keyListener);
         // register mouse event listener
         InputMouseListener mouseListener = new InputMouseListener();
         GlobalScreen.addNativeMouseListener(mouseListener);
