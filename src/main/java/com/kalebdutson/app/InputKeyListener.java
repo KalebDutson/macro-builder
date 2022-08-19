@@ -6,7 +6,6 @@ public class InputKeyListener implements NativeKeyListener {
     public void nativeKeyPressed(NativeKeyEvent e) {
         if (App.DEBUG) {
             System.out.println("--- NativeKeyEvent ---");
-            System.out.println("Source Class: NewMacroWindow");
             System.out.printf("KeyCode: %s%n", e.getKeyCode());
             System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
             System.out.printf("Id: %s%n", e.getID());
