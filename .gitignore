@@ -33,3 +33,5 @@ config.txt
 
 # Internal documentation
 *docs/
+
+*out/
