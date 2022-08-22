@@ -41,4 +41,8 @@ public class PanelOption extends JPanel {
     public JTextField getJTextField(){
         return this.textField;
     }
+    
+    public void setJTextFieldContent(String s){
+        this.textField.setText(s);
+    }
 }
