@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class App
 {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static final boolean MOVE_DEBUG = false;
     public static final Font FONT_A_PLAIN = new Font("Courier", Font.PLAIN, 10 );
     public static final Font FONT_A_BOLD = new Font("Courier", Font.BOLD, 12);
@@ -17,6 +17,8 @@ public class App
 
     public static void main( String[] args ) {
         Config config = new Config();
+        // TODO: Controller instance will most likely be here
+
         // To run jnativehook, use the invokeLater method since jnativehook doesn't
         //  operate on the event dispatch thread
         SwingUtilities.invokeLater(new Runnable() {

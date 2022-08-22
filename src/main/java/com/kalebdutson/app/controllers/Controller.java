@@ -1,11 +1,15 @@
 package com.kalebdutson.app.controllers;
 
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.kalebdutson.app.models.Macro;
 
 /**
  * Controls all data flowing between Views and Models
  */
 public class Controller {
+    private Macro activeMacro;
+
+
     /**
      * Record mouse and keystrokes until termination hotkey is pressed
      */
