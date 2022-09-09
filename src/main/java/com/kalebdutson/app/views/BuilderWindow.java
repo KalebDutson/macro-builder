@@ -1,6 +1,7 @@
 package com.kalebdutson.app.views;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.kalebdutson.app.App;
 import com.kalebdutson.app.Config;
@@ -336,6 +337,12 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
             return true;
         }
         return false;
+    }
+
+    // TODO: remove when done getting String values of nativeKey values
+    @Override
+    public void nativeKeyPressed(NativeKeyEvent ne) {
+        System.out.printf("KeyCode: %s, ID: %s, When: %s\n",ne.getKeyCode(), ne.getID(), ne.getWhen());
     }
     private void setMacroTitle(String title){
         this.setTitle(title);
