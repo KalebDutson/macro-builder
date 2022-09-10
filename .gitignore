@@ -35,3 +35,6 @@ config.txt
 *docs/
 
 *out/
+
+# Tests
+*test/
