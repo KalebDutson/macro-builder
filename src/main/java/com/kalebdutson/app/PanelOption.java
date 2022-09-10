@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class PanelOption extends JPanel {
     private String title;
-    private JTextField textField;
+    private JFormattedTextField textField;
 
     public PanelOption(String title, Dimension dim, Font titleFont) {
         this.setLayout(new GridBagLayout());
@@ -23,7 +23,7 @@ public class PanelOption extends JPanel {
         titledBorder.setTitleFont(titleFont);
         this.setBorder(titledBorder);
 
-        textField = new JTextField();
+        textField = new JFormattedTextField();
         textField.setFont(titleFont);
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
@@ -32,13 +32,24 @@ public class PanelOption extends JPanel {
         c.gridy = 1;
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.fill = GridBagConstraints.HORIZONTAL;
-
         this.add(textField, c);
     }
     public String getTitle(){
         return this.title;
     }
-    public JTextField getJTextField(){
+    public JTextField getJFormattedTextField(){
         return this.textField;
+    }
+
+    public void setJFormattedTextField(JFormattedTextField jf){
+        this.textField = jf;
+    }
+
+    public void setJFormattedTextFieldContent(String s){
+        this.textField.setText(s);
+    }
+
+    private void initTextField(){
+
     }
 }

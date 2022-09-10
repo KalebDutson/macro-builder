@@ -1,39 +1,65 @@
-package com.kalebdutson.app;
+package com.kalebdutson.app.views;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.kalebdutson.app.App;
+import com.kalebdutson.app.Config;
+import com.kalebdutson.app.NumberedTextArea;
+import com.kalebdutson.app.PanelOption;
+import com.kalebdutson.app.models.Macro;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class BuilderWindow extends JFrame implements NativeKeyListener, WindowListener {
-    private Macro m;
+//    private Macro m;
     private boolean ctrlHeld = false;
     private boolean shiftHeld = false;
     private boolean altHeld = false;
     private Config config;
-    private final boolean debug = false;
+    private int windowWidth = 800;
+    private int windowHeight = 600;
+    private TitledBorder titleBorder;
+    private PanelOption iterationsOption;
+    private final boolean debug = true;
     // TODO: implement this to stop menubar accelerators from executing when recording keyboard input
     private boolean recordingActive;
 
     public BuilderWindow(Config config){
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
+        // TODO: Might be better to associate the config the with App class since it is all global info.4
         this.config = config;
         // TODO: Load config file for hotkeys
         // loadConfig();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
-        this.m = new Macro();
+//        this.m = new Macro();
         this.recordingActive = false;
-        int windowWidth = 800;
-        int windowHeight = 600;
         this.setSize(windowWidth, windowHeight);
         this.setLayout(new BorderLayout());
 
+        this.buildView();
+
+        addWindowListener(this);
+        setWindowListener();
+        // TODO: add macro name to title once Macro class fully implemented
+//        this.setTitle("Macro1");
+        this.pack();
+        this.setLocation(new Point((screenSize.width - this.getWidth()) / 2,
+                (screenSize.height - this.getHeight()) / 2));
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
+        this.setResizable(false);
+        this.setVisible(true); // make the frame visible
+        this.toFront();
+        this.requestFocus();
+    }
+
+    public void buildView(){
         // Initialize menu bar
         buildMenuBar();
 
@@ -41,14 +67,14 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         JPanel westPanel = new JPanel(new GridBagLayout());
         westPanel.setPreferredSize(new Dimension(this.getWidth() / 4, this.getHeight()));
         // TODO: add macro name to title border once Macro class fully implemented
-        TitledBorder titleBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "Macro1");
+        this.titleBorder = BorderFactory.createTitledBorder(
+                BorderFactory.createBevelBorder(BevelBorder.LOWERED), "");
         titleBorder.setTitlePosition(TitledBorder.ABOVE_TOP);
         titleBorder.setTitleFont(App.FONT_A_BOLD);
         westPanel.setBorder(titleBorder);
 
         // "Iterations" option panel
-        PanelOption iterationsOption = new PanelOption("Iterations",
+        iterationsOption = new PanelOption("Iterations",
                 new Dimension(this.getWidth() / 4, 100), App.FONT_A_PLAIN);
         GridBagConstraints optionConstraints1 = new GridBagConstraints();
         optionConstraints1.weightx = 1;
@@ -57,6 +83,9 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         optionConstraints1.gridy = 0;
         optionConstraints1.fill = GridBagConstraints.HORIZONTAL;
         optionConstraints1.anchor = GridBagConstraints.FIRST_LINE_START;
+
+        // TODO: Configure the iterationsOption.JFormattedTextField to only take numbers
+
         // Add iterations option panel to west panel
         westPanel.add(iterationsOption, optionConstraints1);
 
@@ -149,28 +178,7 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         eastPanel.add(subpanelEastBottom, ec3);
         this.getContentPane().add(BorderLayout.WEST, westPanel);
         this.getContentPane().add(BorderLayout.EAST, eastPanel);
-
-        addWindowListener(this);
-        setWindowListener();
-        // TODO: add macro name to title once Macro class fully implemented
-        this.setTitle("Macro1");
-        this.pack();
-        this.setLocation(new Point((screenSize.width - this.getWidth()) / 2,
-                (screenSize.height - this.getHeight()) / 2));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // Stop program when ui is closed
-        this.setResizable(false);
-        this.setVisible(true); // make the frame visible
-        this.toFront();
-        this.requestFocus();
     }
-    public void recordInput(){
-        // TODO: connect to Macro class record function
-    }
-
-    public void stopRecording(){
-        // TODO: connect to Macro class stopRecording function
-    }
-
     @Override
     public void windowOpened(WindowEvent e) {
         registerHook();
@@ -193,46 +201,6 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
     @Override
     public void windowDeactivated(WindowEvent e) {    }
 
-    @Override
-    public void nativeKeyReleased(NativeKeyEvent e) {
-//        if(e.getKeyCode() == NativeKeyEvent.VC_SPACE) {
-//            JOptionPane.showConfirmDialog(this, "Input");
-//        }
-        if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL){
-            this.ctrlHeld = false;
-        }
-        else if(e.getKeyCode() == NativeKeyEvent.VC_ALT){
-            this.altHeld = false;
-        }
-        else if(e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
-            this.shiftHeld = false;
-        }
-
-    }
-    @Override
-    public void nativeKeyPressed(NativeKeyEvent e) {
-        if (e.getKeyCode() == NativeKeyEvent.VC_CONTROL) {
-            this.ctrlHeld = true;
-        } else if (e.getKeyCode() == NativeKeyEvent.VC_ALT) {
-            this.altHeld = true;
-        } else if (e.getKeyCode() == NativeKeyEvent.VC_SHIFT) {
-            this.shiftHeld = true;
-        } else if (this.ctrlHeld) {
-            if (e.getKeyCode() == NativeKeyEvent.VC_1) {
-                if (this.debug) {
-                    System.out.println("CTRL + 1 pressed");
-                }
-            }
-        }
-        if (this.debug) {
-            System.out.println("Source Class: NewMacroWindow");
-            System.out.printf("KeyCode: %s%n", e.getKeyCode());
-            System.out.printf("KeyLocation: %s%n", e.getKeyLocation());
-            System.out.printf("Id: %s%n", e.getID());
-            System.out.printf("When: %s%n", e.getWhen());
-            System.out.printf("KeyText: %s%n\n", NativeKeyEvent.getKeyText(e.getKeyCode()));
-        }
-    }
     private void unregisterHook(){
         App.unregisterHook(this.getClass());
     }
@@ -361,4 +329,33 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
         menuBar.add(fileMenu);
         this.setJMenuBar(menuBar);
     }
+
+    // TODO: This may need work after the JTextField is configured to only take numbers
+    private boolean setIterations(int i){
+        if(i > 0) {
+            iterationsOption.setJFormattedTextFieldContent(String.valueOf(i));
+            return true;
+        }
+        return false;
+    }
+
+    // TODO: remove when done getting String values of nativeKey values
+    @Override
+    public void nativeKeyPressed(NativeKeyEvent ne) {
+        System.out.printf("KeyCode: %s, ID: %s, When: %s\n",ne.getKeyCode(), ne.getID(), ne.getWhen());
+    }
+    private void setMacroTitle(String title){
+        this.setTitle(title);
+        this.titleBorder.setTitle(title);
+    }
+    private void addAction(String a){
+
+    }
+    private void insertAction(int index, String a){
+
+    }
+    private void removeAction(int index){
+
+    }
+
 }

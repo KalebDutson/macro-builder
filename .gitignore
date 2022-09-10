@@ -33,3 +33,8 @@ config.txt
 
 # Internal documentation
 *docs/
+
+*out/
+
+# Tests
+*test/
