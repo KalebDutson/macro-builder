@@ -10,7 +10,7 @@ public abstract class Action {
     public Action(long when){
         this.when = when;
     }
-    public float getWhen() {
+    public long getWhen() {
         return this.when;
     }
 }
