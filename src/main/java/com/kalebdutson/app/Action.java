@@ -1,30 +1,16 @@
 package com.kalebdutson.app;
 
-import java.awt.*;
 
 /**
- * TODO: Class may be redundant
  * Input action from the keyboard or mouse
  */
 public abstract class Action {
-    private float executionStartMillis;
+    private final long when;    // When action was executed in milliseconds
 
-    /**
-     * Action with a specified execution time.
-     * @param millis After macro execution, the amount of time until this action is executed.
-     */
-    public Action(float millis){
-        if(millis < 0){
-            throw new IllegalArgumentException("Must provide a positive value for \"millis\"");
-        }
-        this.executionStartMillis = millis;
+    public Action(long when){
+        this.when = when;
     }
-
-    public float getExecutionStartMillis() {
-        return executionStartMillis;
-    }
-
-    public void setExecutionStartMillis(float millis){
-        this.executionStartMillis = millis;
+    public float getWhen() {
+        return this.when;
     }
 }

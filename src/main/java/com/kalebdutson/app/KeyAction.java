@@ -1,24 +1,24 @@
 package com.kalebdutson.app;
 
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+
 public class KeyAction extends Action{
-    private int keyCode;
+    private NativeKeyEvent ne;
 
     /**
      * Create a KeyAction instance for a specific keystroke at a specific time
-     * @param keycode NativeKeyEvent keycode
-     * @param millis After macro execution, the amount of time until this action is executed.
+     * @param when Time when macro is executed in milliseconds
+     * @param ne NativeKeyEvent for key press info and modifiers
      */
-    public KeyAction(int keycode, float millis){
-        super(millis);
-        this.keyCode = keycode;
+    public KeyAction(long when, NativeKeyEvent ne){
+        super(when);
+        this.ne = ne;
     }
 
     public int getKeyCode() {
-        return keyCode;
+        return this.ne.getKeyCode();
     }
 
-    public void setKeyCode(int event) {
-        this.keyCode = event;
-    }
+    // TODO: Implement other methods
 
 }
