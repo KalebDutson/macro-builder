@@ -1,6 +1,8 @@
 package com.kalebdutson.app.models;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.kalebdutson.app.KeyAction;
+import com.kalebdutson.app.MouseAction;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,8 +11,8 @@ import java.util.ArrayList;
 public class Macro {
 
     private int iterations;
-    private ArrayList<NativeMouseEvent> mouseEvents;
-    private ArrayList<NativeKeyEvent> keyEvents;
+    private ArrayList<MouseAction> mouseActions;
+    private ArrayList<KeyAction> keyActions;
     private String title;
     private LocalDateTime createDate;
 
@@ -24,11 +26,11 @@ public class Macro {
     public int getIterations(){
         return this.iterations;
     }
-    public ArrayList<NativeKeyEvent> getKeyEvents(){
-        return this.keyEvents;
+    public ArrayList<KeyAction> getKeyActions(){
+        return this.keyActions;
     }
-    public ArrayList<NativeMouseEvent> getMouseEvents(){
-        return this.mouseEvents;
+    public ArrayList<MouseAction> getMouseActions(){
+        return this.mouseActions;
     }
 
     // Setters
@@ -41,18 +43,27 @@ public class Macro {
     public void setIterations(int i){
         this.iterations = i;
     }
-    public void setKeyEvents(ArrayList<NativeKeyEvent> keyEvents){
-        this.keyEvents = keyEvents;
+    public void setKeyActions(ArrayList<KeyAction> keyActions){
+        this.keyActions = keyActions;
     }
-    public void setMouseEvents(ArrayList<NativeMouseEvent> mouseEvents){
-        this.mouseEvents = mouseEvents;
+    public void setMouseActions(ArrayList<MouseAction> mouseActions){
+        this.mouseActions = mouseActions;
     }
+
     // Add items
-    public void addKeyEvent(NativeKeyEvent keyEvent){
-        this.keyEvents.add(keyEvent);
+    public void addKeyAction(KeyAction keyAction){
+        this.keyActions.add(keyAction);
     }
-    public void addMouseEvent(NativeMouseEvent mouseEvent){
-        this.mouseEvents.add(mouseEvent);
+
+    public void addKeyAction(NativeKeyEvent ke){
+        this.keyActions.add(new KeyAction(ke.getWhen(), ke));
+    }
+    public void addMouseAction(MouseAction mouseAction){
+        this.mouseActions.add(mouseAction);
+    }
+    
+    public void addMouseAction(NativeMouseEvent me){
+        this.mouseActions.add(new MouseAction(me.getWhen(), me));
     }
 
 }
