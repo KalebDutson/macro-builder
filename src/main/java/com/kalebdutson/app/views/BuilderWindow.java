@@ -1,8 +1,12 @@
 package com.kalebdutson.app.views;
 import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeInputEvent;
 import com.github.kwhat.jnativehook.dispatcher.SwingDispatchService;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.kalebdutson.app.App;
 import com.kalebdutson.app.Config;
 import com.kalebdutson.app.NumberedTextArea;
@@ -16,7 +20,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class BuilderWindow extends JFrame implements NativeKeyListener, WindowListener {
+public class BuilderWindow extends JFrame implements NativeKeyListener, NativeMouseInputListener, WindowListener {
 //    private Macro m;
     private boolean ctrlHeld = false;
     private boolean shiftHeld = false;
@@ -341,9 +345,29 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, WindowLi
 
     // TODO: remove when done getting String values of nativeKey values
     @Override
-    public void nativeKeyPressed(NativeKeyEvent ne) {
-        System.out.printf("KeyCode: %s, ID: %s, When: %s\n",ne.getKeyCode(), ne.getID(), ne.getWhen());
+    public void nativeKeyTyped(NativeKeyEvent ke) {
+//        System.out.printf("KeyCode: %s, ID: %s, When: %s\n",ke.getKeyCode(), ke.getID(), ke.getWhen());
+//        System.out.printf("Modifiers Count: %s, Modifiers: %s\n", ke.getModifiers(), NativeInputEvent.getModifiersText(ke.getModifiers()));
+        System.out.printf("Time: %s, ID: %s, %s%n", ke.getWhen(), ke.getID(), ke.paramString());
+        // [when, id, modifiers, rawCode, keycode, keyChar]
+        System.out.printf("Raw: [%s, %s, %s, %s, %s, %s]%n", ke.getWhen(), ke.getID(), ke.getModifiers(), ke.getRawCode(), ke.getKeyCode(), ke.getKeyChar());
+        // id, modifiers, rawcode, keycode, keychar, keylocation(optional)
+        NativeKeyEvent e = new NativeKeyEvent(ke.getID(), ke.getModifiers(), ke.getRawCode(), ke.getKeyCode(), ke.getKeyChar());
     }
+
+    // TODO: Get mouse event listeners working
+    // TODO: Add listener for mouse movement
+    @Override
+    public void nativeMouseClicked(NativeMouseEvent me){
+        System.out.printf("Time: %s, ID: %s, %s%n", me.getWhen(), me.getID(), me.paramString());
+
+        // [when, id, modifers, x, y, clickCount]
+        System.out.printf("Raw: [%s, %s, %s, %s, %s, %s]%n", me.getWhen(), me.getID(), me.getModifiers(), me.getX(), me.getY(), me.getClickCount());
+        // id, modifers, x, y, clickCount
+//        NativeMouseEvent e = new NativeMouseEvent();
+    }
+
+
     private void setMacroTitle(String title){
         this.setTitle(title);
         this.titleBorder.setTitle(title);
