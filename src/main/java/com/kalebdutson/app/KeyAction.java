@@ -1,6 +1,8 @@
 package com.kalebdutson.app;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
 
 public class KeyAction extends Action{
     private NativeKeyEvent ke;
@@ -17,6 +19,10 @@ public class KeyAction extends Action{
 
     public int getKeyCode() {
         return this.ke.getKeyCode();
+    }
+
+    public NativeKeyEvent getNativeKeyEvent(){
+        return this.ke;
     }
 
     // TODO: Implement other methods
