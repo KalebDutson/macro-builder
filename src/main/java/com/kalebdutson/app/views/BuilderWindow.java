@@ -349,7 +349,8 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, NativeMo
 //        System.out.printf("KeyCode: %s, ID: %s, When: %s\n",ke.getKeyCode(), ke.getID(), ke.getWhen());
 //        System.out.printf("Modifiers Count: %s, Modifiers: %s\n", ke.getModifiers(), NativeInputEvent.getModifiersText(ke.getModifiers()));
         System.out.printf("Time: %s, ID: %s, %s%n", ke.getWhen(), ke.getID(), ke.paramString());
-        // [when, id, modifiers, rawCode, keycode, keyChar]
+
+        // [long when, int id, int modifiers, int rawCode, int keycode, char keyChar]
         System.out.printf("Raw: [%s, %s, %s, %s, %s, %s]%n", ke.getWhen(), ke.getID(), ke.getModifiers(), ke.getRawCode(), ke.getKeyCode(), ke.getKeyChar());
         // id, modifiers, rawcode, keycode, keychar, keylocation(optional)
         NativeKeyEvent e = new NativeKeyEvent(ke.getID(), ke.getModifiers(), ke.getRawCode(), ke.getKeyCode(), ke.getKeyChar());
@@ -361,7 +362,7 @@ public class BuilderWindow extends JFrame implements NativeKeyListener, NativeMo
     public void nativeMouseClicked(NativeMouseEvent me){
         System.out.printf("Time: %s, ID: %s, %s%n", me.getWhen(), me.getID(), me.paramString());
 
-        // [when, id, modifers, x, y, clickCount]
+        // [long when, int id, int modifers, int x, int y, int clickCount]
         System.out.printf("Raw: [%s, %s, %s, %s, %s, %s]%n", me.getWhen(), me.getID(), me.getModifiers(), me.getX(), me.getY(), me.getClickCount());
         // id, modifers, x, y, clickCount
 //        NativeMouseEvent e = new NativeMouseEvent();
